@@ -169,26 +169,36 @@ for (let i = 0; i < count; i++) {
         diaryData.forEach(item => {
             if (!targetTag || item.category === targetTag) {
                 const card = document.createElement('a');
-                card.href = `post-off.html?id=${item.id}`;
+                card.href = `post.html?id=${item.id}`;
                 card.className = 'article-card';
+
+                // ★ここから下を、この通りに書き換えて！
                 card.innerHTML = `
-                    <div class="card-meta">${item.date}<span>#${item.category}</span></div>
+                    <div class="card-meta" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span class="card-date" style="font-size: 0.85rem; color: #888;">${item.date}</span>
+                        <span class="tag-item2">${item.category}</span>
+                    </div>
                     <h2 class="card-title">${item.title}</h2>
                 `;
+                // ★ここまで！
+
                 listContainer.appendChild(card);
             }
         });
 
-        // 見出しの更新
+        // --- 3. 見出しの更新（ループの外に出したよ！） ---
         const pageTitle = document.querySelector('.list-page-title');
         if (pageTitle) {
             pageTitle.innerText = targetTag ? `❄ ${targetTag} 一覧 ❄` : "❄ 配信外日記 ❄";
         }
-    } // ← この updateList を閉じる「 } 」が抜けてたよ！
+    }
 
     window.addEventListener('load', updateList);
     window.addEventListener('popstate', updateList);
 </script>
+
+<script src="js/diary-data.js"></script>
+<script src="js/sidebar-loader.js"></script>
 
 </body>
 </html>

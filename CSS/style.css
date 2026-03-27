@@ -454,6 +454,17 @@ border-radius: 10px;
   transition: all 0.15s;
 }
 
+.tag-item2 {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border: 1px solid var(--card-border);
+  background: #ffffff;
+  border-radius: 20px;
+  color: var(--navy-mid);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
 .tag-item:hover {
   background: var(--blue-light);
   color: var(--navy);

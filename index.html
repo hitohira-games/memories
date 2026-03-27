@@ -10,11 +10,9 @@
 </head>
 <body>
 
-<!-- 背景レイヤー -->
 <div class="bg-layer"></div>
 <div class="bg-snowflakes"></div>
 
-<!-- 蔦の装飾（SVG） -->
 <svg class="vine-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice">
   <path d="M18 0 C18 0 10 40 18 80 C26 120 8 160 18 200 C28 240 10 280 18 320 C26 360 8 400 18 440 C28 480 10 520 18 560 C26 600 8 640 18 680 C28 720 18 800 18 800" stroke="#5a8a6a" stroke-width="2" fill="none" opacity="0.6"/>
   <ellipse cx="10" cy="60" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 60)" opacity="0.7"/>
@@ -42,11 +40,9 @@
   <ellipse cx="26" cy="480" rx="7" ry="4" fill="#5a8a6a" transform="rotate(25 26 480)" opacity="0.7"/>
 </svg>
 
-<!-- 雪アニメーション -->
 <div class="snow-container" id="snowContainer"></div>
 
 <div id="wrapper">
-  <!-- ===== ヘッダー ===== -->
   <header class="fade-in">
     <div class="site-title-deco">
       <div class="deco-line"></div>
@@ -55,10 +51,9 @@
       <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
       <div class="deco-line"></div>
     </div>
-    <p class="site-subtitle">hitohira-games.netlify.ap</p>
+    <p class="site-subtitle">hitohira-games.netlify.app</p>
   </header>
 
-  <!-- ===== ナビ ===== -->
   <nav class="fade-in fade-in-delay-1">
     <a href="list.html">配信日記</a>
     <a href="list-off.html">配信外日記</a>
@@ -66,87 +61,81 @@
     <a href="profile.html">プロフィール</a>
   </nav>
 
-  <!-- ===== メイン ===== -->
   <main class="main-grid fade-in fade-in-delay-2">
-
-    <!-- 左：挨拶 -->
     <section>
       <div class="card greeting-card">
         <p class="card-title">❄ ようこそ</p>
         <div class="greeting-text">
-          <p>
-            ここは、ゲームの思い出を<span class="greeting-em">ひとひらずつ</span>綴る、小さな庭です。
-          </p>
-          <p>
-            配信で遊んだゲームのこと、ひとりで冒険したゲームのこと——<br>
-            心に残った瞬間を、私なりの言葉でそっと記録しています。
-          </p>
-          <p>
-            攻略の役には立たないかもしれないけれど、<br>
-            一緒に「楽しい！」を分かち合えたら嬉しいです。
-          </p>
-          <p>
-            気分で更新する気まぐれ日記ですが、<br>
-            気になるページをゆっくり見ていってください。
-          </p>
+          <p>ここは、ゲームの思い出を<span class="greeting-em">ひとひらずつ</span>綴る、小さな庭です。</p>
+          <p>配信で遊んだゲームのこと、ひとりで冒険したゲームのこと——<br>
+             心に残った瞬間を、私なりの言葉でそっと記録しています。</p>
+          <p>攻略の役には立たないかもしれないけれど、一緒に「楽しい！」を分かち合えたら嬉しいです。</p>
         </div>
       </div>
-
-
-      <!-- 左：下部メニュー -->
-<div class="card greeting-card" style="margin-top:22px">
+      <div class="card greeting-card" style="margin-top:22px">
         <p class="card-title">❄ お品書き</p>
         <div class="greeting-text">
-        <div class="section-links" style="margin-top:22px">
-          <a href="list.html" class="sec-link">
-            <span class="sec-link-icon">📡</span>
-            <span>配信日記</span>
-          </a>
-          <a href="list-off.html" class="sec-link">
-            <span class="sec-link-icon">🎮</span>
-            <span>配信外日記</span>
-          </a>
-          <a href="games.html" class="sec-link">
-            <span class="sec-link-icon">📚</span>
-            <span>遊んだゲーム</span>
-          </a>
-          <a href="profile.html" class="sec-link">
-            <span class="sec-link-icon">🌿</span>
-            <span>プロフィール</span>
-          </a>
+          <div class="section-links" style="margin-top:22px">
+            <a href="list.html" class="sec-link">📡 配信日記</a>
+            <a href="list-off.html" class="sec-link">🎮 配信外日記</a>
+            <a href="games.html" class="sec-link">📚 遊んだゲーム</a>
+            <a href="profile.html" class="sec-link">🌿 プロフィール</a>
+          </div>
         </div>
       </div>
     </section>
 
-<!--　サイドバー　-->
+    <div id="sidebar-container"></div>
+  </main>
 
-<div id="sidebar-container"></div>
-
-<script>
-  fetch("partials/sidebar.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("sidebar-container").innerHTML = data;
-    })
-    .catch(error => console.error("読み込み失敗:", error));
-</script>
-
-
-   
-  <!-- ===== フッター ===== -->
   <footer class="fade-in">
     <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
-    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.netlify.ap</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.netlify.app</p>
   </footer>
 </div>
 
+<script src="js/diary-data.js"></script>
+
 <script>
-// 雪を降らせる
+// 1. サイドバーを読み込む
+fetch("partials/sidebar.html")
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById("sidebar-container").innerHTML = data;
+    // サイドバーのHTMLが入った「後」にリストを作る
+    if (typeof diaryData !== 'undefined') {
+      renderRecentPosts();
+    }
+  });
+
+// 2. 新着リストを生成する
+function renderRecentPosts() {
+  const listContainer = document.getElementById('recent-posts');
+  if (!listContainer) return;
+
+  const latestPosts = diaryData.slice(0, 3);
+  
+  // ゆうちゃんが CSS で設定したデザイン（文字サイズや余白）を
+  // そのまま適用するために、クラス名や構造を元通りにするよ！
+  listContainer.innerHTML = latestPosts.map(post => {
+    const snowClass = post.isLive ? 'recent-snow2' : 'recent-snow1';
+
+    return `
+      <li style="list-style: none; margin-bottom: 12px; line-height: 1.4;">
+        <span class="${snowClass}" style="margin-right: 5px;">❄</span>
+        <a href="post.html?id=${post.id}" 
+           style="color: inherit; text-decoration: none; font-size: 0.9rem; display: inline-block;">
+          ${post.title}
+        </a>
+      </li>
+    `;
+  }).join('');
+}
+
+// 3. 雪アニメーション（ゆうちゃんの設定）
 const container = document.getElementById('snowContainer');
 const symbols = ['❄','❅','❆','✦','✧'];
-const count = 22;
-
-for (let i = 0; i < count; i++) {
+for (let i = 0; i < 22; i++) {
   const el = document.createElement('span');
   el.classList.add('snowflake');
   el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
@@ -159,4 +148,8 @@ for (let i = 0; i < count; i++) {
 }
 </script>
 </body>
+
+<script src="js/diary-data.js"></script>
+<script src="js/sidebar-loader.js"></script>
+
 </html>

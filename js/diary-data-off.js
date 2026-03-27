@@ -4,13 +4,15 @@ const diaryData = [
     date: "2026/04/04",
     title: "FF14配信日記 2026/04/04",
     category: "FF14",
-    content: "これは配信外FF14のあらすじ" // 4/07のあらすじ
+    content: "これは配信外FF14のあらすじ" ,// 4/07のあらすじ
+    isLive: false // ← 配信外なら false
   },
   {
     id: "20260401",
     date: "2026/04/01",
     title: "FF14配信日記 2026/04/01",
     category: "スターサンド",
-    content: "配信外スターサンドのあらすじ" // 4/06のあらすじ
+    content: "配信外スターサンドのあらすじ", // 4/06のあらすじ
+    isLive: false // ← 配信外なら false
   }
 ];
