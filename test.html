@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>❄ ゲームひとひら綴り ❄</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <style>
+        /* レイアウト崩れ防止の緊急セット */
+        .main-grid { 
+            display: flex !important; 
+            gap: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        article { flex: 1; min-width: 0; }
+        #sidebar-container { width: 300px; }
+        
+        /* ボタンのデザイン（ゆうちゃんのCSSと喧嘩しないように直接書くね） */
+        .article-nav { 
+            display: flex !important; 
+            justify-content: space-between; 
+            gap: 15px; 
+            margin: 40px 0;
+        }
+        .article-nav-btn { 
+            flex: 1; 
+            padding: 15px; 
+            border: 1px solid #5a8a6a; 
+            text-decoration: none; 
+            color: #5a8a6a; 
+            text-align: center; 
+            border-radius: 8px; 
+            background: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <header style="text-align: center; padding: 20px;">
+            <a href="index.html" class="site-title" style="font-size: 2rem; text-decoration: none; color: #5a8a6a;">❄ ゲームひとひら綴り</a>
+        </header>
+
+        <div class="main-grid">
+            <article>
+                <h1 id="post-title">読み込み中...</h1>
+                <div id="list-content">記事を読み込んでいます...</div>
+
+                <nav class="article-nav">
+                    <a href="#" class="article-nav-btn" id="btn-prev">
+                        <span>‹ 前の記事</span><br>
+                        <span id="title-prev" style="font-weight: bold;">(探しています)</span>
+                    </a>
+                    <a href="#" class="article-nav-btn" id="btn-next">
+                        <span>次の記事 ›</span><br>
+                        <span id="title-next" style="font-weight: bold;">(探しています)</span>
+                    </a>
+                </nav>
+            </article>
+
+            <div id="sidebar-container">
+                </div>
+        </div>
+    </div>
+
+    <script src="js/diary-data.js"></script>
+    <script src="js/diary-contents.js"></script>
+    <script src="js/diary-list-view.js"></script>
+    <script>
+        // サイドバーを読み込む
+        fetch("partials/sidebar.html")
+            .then(res => res.text())
+            .then(data => { document.getElementById("sidebar-container").innerHTML = data; });
+
+        // ページが開いたらボタンを更新する
+        window.addEventListener('load', () => {
+            const id = new URLSearchParams(window.location.search).get('id') || "20260407";
+            if (typeof updateNavigation === '

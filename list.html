@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配信日記一覧 — ❄ ゲームひとひら綴り ❄</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-snowflakes"></div>
+
+<svg class="vine-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice">
+  <path d="M18 0 C18 0 10 40 18 80 C26 120 8 160 18 200 C28 240 10 280 18 320 C26 360 8 400 18 440 C28 480 10 520 18 560 C26 600 8 640 18 680 C28 720 18 800 18 800" stroke="#5a8a6a" stroke-width="2" fill="none" opacity="0.6"/>
+  <ellipse cx="10" cy="60"  rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 60)"  opacity="0.7"/>
+  <ellipse cx="26" cy="120" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 120)"  opacity="0.7"/>
+  <ellipse cx="10" cy="180" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 180)" opacity="0.7"/>
+  <ellipse cx="26" cy="240" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 240)"  opacity="0.7"/>
+  <ellipse cx="10" cy="300" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 300)" opacity="0.7"/>
+  <ellipse cx="26" cy="360" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 360)"  opacity="0.7"/>
+  <ellipse cx="10" cy="420" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 420)" opacity="0.7"/>
+  <ellipse cx="26" cy="480" rx="7" ry="4" fill="#5a8a6a" transform="rotate(25 26 480)"  opacity="0.7"/>
+  <ellipse cx="10" cy="540" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 540)" opacity="0.7"/>
+  <ellipse cx="26" cy="600" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 600)"  opacity="0.7"/>
+  <ellipse cx="10" cy="660" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 660)" opacity="0.7"/>
+  <ellipse cx="26" cy="720" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 720)"  opacity="0.7"/>
+</svg>
+<svg class="vine-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice">
+  <path d="M18 0 C18 0 10 40 18 80 C26 120 8 160 18 200 C28 240 10 280 18 320 C26 360 8 400 18 440 C28 480 10 520 18 560 C26 600 8 640 18 680 C28 720 18 800 18 800" stroke="#5a8a6a" stroke-width="2" fill="none" opacity="0.6"/>
+  <ellipse cx="10" cy="60"  rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 60)"  opacity="0.7"/>
+  <ellipse cx="26" cy="120" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 120)"  opacity="0.7"/>
+  <ellipse cx="10" cy="180" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 180)" opacity="0.7"/>
+  <ellipse cx="26" cy="240" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 240)"  opacity="0.7"/>
+  <ellipse cx="10" cy="300" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 300)" opacity="0.7"/>
+  <ellipse cx="26" cy="360" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 360)"  opacity="0.7"/>
+  <ellipse cx="10" cy="420" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 420)" opacity="0.7"/>
+  <ellipse cx="26" cy="480" rx="7" ry="4" fill="#5a8a6a" transform="rotate(25 26 480)"  opacity="0.7"/>
+</svg>
+
+<div class="snow-container" id="snowContainer"></div>
+
+<div id="wrapper">
+
+  <!-- ヘッダー -->
+  <header class="fade-in">
+    <div class="site-title-deco">
+      <div class="deco-line"></div>
+      <span class="snowflake-deco">❄</span>
+      <a href="index.html" class="site-title">ゲームひとひら綴り</a>
+      <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
+      <div class="deco-line"></div>
+    </div>
+    <p class="site-subtitle">hitohira.games</p>
+  </header>
+
+  <!-- ナビ -->
+  <nav class="fade-in fade-in-delay-1">
+  <a href="list.html">配信日記</a>
+  <a href="list-off.html">配信外日記</a>
+  <a href="games.html">今まで遊んだゲーム</a>
+  <a href="profile.html">プロフィール</a>
+</nav>
+
+  <!-- メイン -->
+  <div class="main-grid fade-in fade-in-delay-2">
+
+    <!-- 左：記事一覧 -->
+   <main>
+  <div class="list-heading">
+    <p class="breadcrumb"><a href="index.html">トップ</a><span>›</span>配信日記</p>
+    
+    <h1 class="list-page-title"><span class="title-snow1">❄</span>配信日記</h1>
+    <p class="list-details">リンク先で全文が読めます</p>
+    
+    <div class="tag-filter" id="dynamic-tags">
+  </div>
+  </div>
+
+  <div class="article-list" id="diary-list-container">
+  </div>
+
+  <div class="pagination">
+    <a href="#" class="page-btn current">1</a>
+    <a href="#" class="page-btn">2</a>
+    <a href="#" class="page-btn">›</a>
+  </div>
+</main>
+
+    <!-- サイドバー -->
+   <div id="sidebar-container"></div>
+<script>
+  fetch("/partials/sidebar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("sidebar-container").innerHTML = data;
+    });
+</script>
+<!-- 下タグ一覧
+      <div class="card" style="margin-bottom:18px">
+        <p class="card-title">❄ タグ</p>
+        <div class="tag-cloud">
+          <a href="#" class="tag-item">#FF14</a>
+          <a href="#" class="tag-item">#スターサンド</a>
+          <a href="#" class="tag-item">#Elin</a>
+          <a href="#" class="tag-item">#Skyrim</a>
+          <a href="#" class="tag-item">#RPG</a>
+          <a href="#" class="tag-item">#オープンワールド</a>
+        </div>
+      </div>
+    -->
+
+  <footer class="fade-in">
+    <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira.games</p>
+  </footer>
+</div>
+
+<script>
+const container = document.getElementById('snowContainer');
+const symbols = ['❄','❅','❆','✦','✧'];
+const count = 22;
+for (let i = 0; i < count; i++) {
+  const el = document.createElement('span');
+  el.classList.add('snowflake');
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
+  el.style.animationDuration = (10 + Math.random() * 18) + 's';
+  el.style.animationDelay = (Math.random() * 15) + 's';
+  el.style.opacity = 0;
+  container.appendChild(el);
+}
+</script>
+
+<script src="js/diary-data.js"></script>
+
+<script>
+    function updateList() {
+        const params = new URLSearchParams(window.location.search);
+        const targetTag = params.get('tag'); 
+        
+        const listContainer = document.getElementById('diary-list-container');
+        const tagFilter = document.getElementById('dynamic-tags'); 
+        
+        if (!listContainer || typeof diaryData === 'undefined') return;
+
+        // --- 1. タグボタンを自動生成する ---
+        if (tagFilter) {
+            const categories = [...new Set(diaryData.map(item => item.category))];
+            let tagHTML = `<a href="list.html" class="${!targetTag ? 'active' : ''}">すべて</a>`;
+            categories.forEach(cat => {
+                const isActive = (targetTag === cat) ? 'active' : '';
+                tagHTML += `<a href="list.html?tag=${encodeURIComponent(cat)}" class="${isActive}">${cat}</a>`;
+            });
+            tagFilter.innerHTML = tagHTML;
+        }
+
+        // --- 2. 記事リストを絞り込んで表示する ---
+        listContainer.innerHTML = ''; 
+        diaryData.forEach(item => {
+            if (!targetTag || item.category === targetTag) {
+                const card = document.createElement('a');
+                card.href = `post.html?id=${item.id}`;
+                card.className = 'article-card';
+                card.innerHTML = `
+                    <div class="card-meta">${item.date}<span>#${item.category}</span></div>
+                    <h2 class="card-title">${item.title}</h2>
+                `;
+                listContainer.appendChild(card);
+            }
+        }); // ← ここで記事ループが正しく終わるように修正したよ！
+
+        // --- 3. 見出しの更新（ループの外に出したよ！） ---
+        const pageTitle = document.querySelector('.list-page-title');
+        if (pageTitle) {
+            pageTitle.innerText = targetTag ? `❄ ${targetTag} 一覧 ❄` : "❄ 配信日記 ❄";
+        }
+    }
+
+    window.addEventListener('load', updateList);
+    window.addEventListener('popstate', updateList);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FF14配信日記 2026/04/07 — ❄ ゲームひとひら綴り ❄</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-snowflakes"></div>
+
+<svg class="vine-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice">
+  <path d="M18 0 C18 0 10 40 18 80 C26 120 8 160 18 200 C28 240 10 280 18 320 C26 360 8 400 18 440 C28 480 10 520 18 560 C26 600 8 640 18 680 C28 720 18 800 18 800" stroke="#5a8a6a" stroke-width="2" fill="none" opacity="0.6"/>
+  <ellipse cx="10" cy="60"  rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 60)"  opacity="0.7"/>
+  <ellipse cx="26" cy="120" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 120)"  opacity="0.7"/>
+  <ellipse cx="10" cy="180" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 180)" opacity="0.7"/>
+  <ellipse cx="26" cy="240" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 240)"  opacity="0.7"/>
+  <ellipse cx="10" cy="300" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 300)" opacity="0.7"/>
+  <ellipse cx="26" cy="360" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 360)"  opacity="0.7"/>
+  <ellipse cx="10" cy="420" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 420)" opacity="0.7"/>
+  <ellipse cx="26" cy="480" rx="7" ry="4" fill="#5a8a6a" transform="rotate(25 26 480)"  opacity="0.7"/>
+  <ellipse cx="10" cy="540" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 540)" opacity="0.7"/>
+  <ellipse cx="26" cy="600" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 600)"  opacity="0.7"/>
+  <ellipse cx="10" cy="660" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 660)" opacity="0.7"/>
+  <ellipse cx="26" cy="720" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 720)"  opacity="0.7"/>
+</svg>
+<svg class="vine-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice">
+  <path d="M18 0 C18 0 10 40 18 80 C26 120 8 160 18 200 C28 240 10 280 18 320 C26 360 8 400 18 440 C28 480 10 520 18 560 C26 600 8 640 18 680 C28 720 18 800 18 800" stroke="#5a8a6a" stroke-width="2" fill="none" opacity="0.6"/>
+  <ellipse cx="10" cy="60"  rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 60)"  opacity="0.7"/>
+  <ellipse cx="26" cy="120" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 120)"  opacity="0.7"/>
+  <ellipse cx="10" cy="180" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 180)" opacity="0.7"/>
+  <ellipse cx="26" cy="240" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 240)"  opacity="0.7"/>
+  <ellipse cx="10" cy="300" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 300)" opacity="0.7"/>
+  <ellipse cx="26" cy="360" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 360)"  opacity="0.7"/>
+  <ellipse cx="10" cy="420" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 420)" opacity="0.7"/>
+  <ellipse cx="26" cy="480" rx="7" ry="4" fill="#5a8a6a" transform="rotate(25 26 480)"  opacity="0.7"/>
+</svg>
+
+<div class="snow-container" id="snowContainer"></div>
+
+<div id="wrapper">
+
+  <!-- ヘッダー -->
+  <header class="fade-in">
+    <div class="site-title-deco">
+      <div class="deco-line"></div>
+      <span class="snowflake-deco">❄</span>
+      <a href="index.html" class="site-title">ゲームひとひら綴り</a>
+      <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
+      <div class="deco-line"></div>
+    </div>
+    <p class="site-subtitle">hitohira.games</p>
+  </header>
+
+  <!-- ナビ -->
+  <nav class="fade-in fade-in-delay-1">
+    <a href="#" class="active">配信日記</a>
+    <a href="#">配信外日記</a>
+    <a href="#">今まで遊んだゲーム</a>
+    <a href="#">プロフィール</a>
+  </nav>
+
+  <!-- メイン -->
+  <div class="main-grid fade-in fade-in-delay-2">
+
+    <!-- 左：記事本文 -->
+    <article>
+
+      <p class="breadcrumb">
+        <a href="index.html">トップ</a><span>›</span>
+        <a href="list.html">配信日記</a><span>›</span>
+        FF14配信日記 2026/04/07
+      </p>
+
+      <div class="article-header">
+        <div class="article-meta-top">
+          <span class="article-category">配信日記</span>
+          <span class="article-date">2026年4月7日</span>
+        </div>
+        <h1 class="article-title">FF14配信日記 2026/04/07</h1>
+        <div class="article-tags">
+          <a href="#" class="article-tag">#FF14</a>
+          <a href="#" class="article-tag">#漆黒のヴィランズ</a>
+          <a href="#" class="article-tag">#MMORPG</a>
+        </div>
+      </div>
+
+      <!-- 本文 -->
+      <div class="article-body-card">
+        <div class="article-body">
+
+          <p>今日の配信は漆黒のヴィランズ、クライマックス手前まで進めた。ここまで来るのに何ヶ月かかったんだろう、と思いながら進めていた。</p>
+
+          <div class="article-screenshots">
+            <figure class="screenshot-item">
+              <div class="screenshot-placeholder">
+                <span class="ph-icon">🖼</span>
+                <span>スクリーンショット（例：夜のシナリオシーン）</span>
+              </div>
+              <figcaption class="screenshot-caption">このシーン、光の当たり方がとても綺麗だった</figcaption>
+            </figure>
+          </div>
+
+          <p>例のシーンはやっぱり泣いてしまった。リスナーさんも一緒に静かになってくれていて、配信全体がふわっとした空気になったのが嬉しかった。</p>
+
+          <p>途中、戦闘で何度か詰まりかけたけど、なんとか無事に先へ進めた。次回はいよいよ終盤に入る。続きが怖いような、楽しみなような気持ち。</p>
+
+          <div class="article-screenshots">
+            <figure class="screenshot-item">
+              <div class="screenshot-placeholder">
+                <span class="ph-icon">🖼</span>
+                <span>スクリーンショット（例：戦闘シーン）</span>
+              </div>
+              <figcaption class="screenshot-caption">このボス戦、何度か全滅した</figcaption>
+            </figure>
+          </div>
+
+          <p>今日も見に来てくれたリスナーさん、ありがとうございました。次回もよろしくお願いします。</p>
+
+        </div>
+
+        <p class="article-footer-note">
+          ❄ &nbsp; 感想は <a href="#">X（旧Twitter）</a> や配信で教えてもらえたら嬉しいです。&nbsp; ❄
+        </p>
+      </div>
+
+      <!-- 前後ナビ -->
+      <nav class="article-nav">
+        <a href="#" class="article-nav-btn prev">
+          <span class="nav-direction">‹ 前の記事</span>
+          <span class="nav-title">FF14配信日記 2026/04/03</span>
+        </a>
+        <a href="#" class="article-nav-btn next">
+          <span class="nav-direction">次の記事 ›</span>
+          <span class="nav-title">スターサンド日記 2026/04/10</span>
+        </a>
+      </nav>
+
+      <!-- 同タグ記事 -->
+      <div class="related-section">
+        <p class="related-heading">❄ 同じタグの記事（#FF14）</p>
+        <ul class="related-list">
+          <li class="related-item"><a href="#">
+            <span class="rel-snow">❄</span>
+            <span><span class="rel-title">FF14日記一覧</span></span>
+          </a></li>
+        </ul>
+      </div>
+
+    </article>
+
+ <!-- サイドバー -->
+   <div id="sidebar-container"></div>
+<script>
+  fetch("/partials/sidebar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("sidebar-container").innerHTML = data;
+    });
+</script>
+
+   
+  <footer class="fade-in">
+    <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira.games</p>
+  </footer>
+</div>
+
+<script>
+const container = document.getElementById('snowContainer');
+const symbols = ['❄','❅','❆','✦','✧'];
+const count = 22;
+for (let i = 0; i < count; i++) {
+  const el = document.createElement('span');
+  el.classList.add('snowflake');
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
+  el.style.animationDuration = (10 + Math.random() * 18) + 's';
+  el.style.animationDelay = (Math.random() * 15) + 's';
+  el.style.opacity = 0;
+  container.appendChild(el);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール — ❄ ゲームひとひら綴り ❄</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-snowflakes"></div>
+<div class="snow-container" id="snowContainer"></div>
+
+<div id="wrapper">
+    <header class="fade-in">
+        <div class="site-title-deco">
+            <div class="deco-line"></div>
+            <span class="snowflake-deco">❄</span>
+            <a href="index.html" class="site-title">ゲームひとひら綴り</a>
+            <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
+            <div class="deco-line"></div>
+        </div>
+        <p class="site-subtitle">hitohira.games</p>
+    </header>
+
+    <nav class="fade-in fade-in-delay-1">
+        <a href="list.html">配信日記</a>
+        <a href="list_off.html">配信外日記</a>
+        <a href="games.html">今まで遊んだゲーム</a>
+        <a href="profile.html" class="active">プロフィール</a>
+    </nav>
+
+    <div class="main-grid fade-in fade-in-delay-2">
+        <main>
+            <div class="list-heading">
+                <p class="breadcrumb"><a href="index.html">トップ</a><span>›</span>プロフィール</p>
+                <h1 class="list-page-title"><span class="title-snow1">❄</span>プロフィール</h1>
+            </div>
+
+            <section class="article-body-card" style="padding: 40px 30px; text-align: center;">
+                
+                <div style="margin-bottom: 30px;">
+                    <img src="images/profile.png" alt="立ち絵" 
+    　　　　　　　　　　 style="width: 300px; height: auto; display: block; margin: 0 auto 30px; border-radius: 15px;">
+                </div>
+
+                <h2 style="font-family: 'Klee One', sans-serif; color: #3378C1; font-size: 2rem; margin-bottom: 25px; font-weight: 500;">
+                 雪乃餅こん
+                </h2>
+
+                <div style="line-height: 2; margin-bottom: 40px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 400;">
+                ゲーム配信をしながら<br>
+                忘れたくない日々とゲームの思い出を<br>
+                日記として残しています。
+                </div>
+
+                <hr style="border: none; border-top: 1px dashed #88ceeb; margin: 30px auto; width: 60%; opacity: 0.5;">
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #3378C1; font-size: 1.1rem; margin-bottom: 10px;">❄ 目指すもの</h3>
+                    <p>一人でも多くの人と楽しい！を共有したい</p>
+                </div>
+
+                <div style="margin-bottom: 40px;">
+                    <h3 style="color: #3378C1; font-size: 1.1rem; margin-bottom: 10px;">❄ 好きなもの</h3>
+                    <p style="font-size: 0.95rem; letter-spacing: 0.05em;">
+                        冬、白と水色、林檎、紅茶、甘い物、<br>
+                        しょっぱい物、香る物、猫、水の音
+                    </p>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h3 style="color: #3378C1; font-size: 1.1rem; margin-bottom: 15px;">❄ リンク</h3>
+                    <div class="tag-filter" style="justify-content: center; gap: 10px;">
+                        <a href="https://www.twitch.tv/..." target="_blank">Twitch</a>
+                        <a href="https://www.youtube.com/..." target="_blank">YouTube</a>
+                        <a href="https://x.com/..." target="_blank">X (Twitter)</a>
+                        <a href="https://marshmallow-qa.com/..." target="_blank">マシュマロ</a>
+                    </div>
+                </div>
+
+            </section>
+
+            <style>
+  /* プロフィールカードの中の見出しを全部細くする */
+  .article-body-card h2, 
+  .article-body-card h3 {
+    font-weight: 500 !important;
+  }
+  /* 全体の文字も標準の細さにする */
+  .article-body-card {
+    font-weight: 400;
+  }
+</style>
+
+        </main>
+
+        <div id="sidebar-container"></div>
+    </div>
+
+    <footer class="fade-in">
+        <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira.games</p>
+    </footer>
+</div>
+
+<script>
+// サイドバー読み込み
+fetch("partials/sidebar.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("sidebar-container").innerHTML = data;
+    });
+
+// 雪のスクリプト
+const container = document.getElementById('snowContainer');
+const symbols = ['❄','❅','❆','✦','✧'];
+for (let i = 0; i < 22; i++) {
+    const el = document.createElement('span');
+    el.classList.add('snowflake');
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
+    el.style.animationDuration = (10 + Math.random() * 18) + 's';
+    el.style.animationDelay = (Math.random() * 15) + 's';
+    container.appendChild(el);
+}
+</script>
+
+</body>
+</html>
