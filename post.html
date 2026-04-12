@@ -162,8 +162,9 @@
 
     try {
       const res = await fetch(MY_GAS_URL);
-      const rows = await res.json();
-      const d = rows.find(item => String(item.id) === String(id));
+      const allRows = await res.json();
+      const d = allRows.find(item => String(item.id) === String(id));
+      window.diaryData = rows;
       
       if (!d) {
         document.getElementById('post-title').innerText = "記事が見つかりません";
@@ -202,14 +203,32 @@
     } catch (e) { console.error(e); }
   }
 
-  // 3. ページが開いたら「本文」と「カテゴリー」を同時に実行！
-  window.addEventListener('load', () => {
-      loadDiary();
-      loadCategoryList();
+  // 3. ページが開いたら「本文」と「カテゴリー」を順番に実行！
+  // ページが読み込まれた時の処理
+  window.addEventListener('load', async () => {
+      // 1. まずはメインの日記リスト（または本文）を読み込む
+      // await をつけることで「読み込みが終わるまで次に行かないで」と命令するよ
+      if (typeof updateList === 'function') {
+          await updateList(); 
+      } else if (typeof loadDiary === 'function') {
+          await loadDiary();
+          await loadCategoryList();
+      }
+      
+      // 2. メインの読み込みが「完全に終わった後」に、新着日記を表示する
+      if (typeof renderRecentPosts === 'function') {
+          renderRecentPosts();
+      }
+  });
+
+  // ブラウザの戻る・進むボタン用
+  window.addEventListener('popstate', () => {
+      if (typeof updateList === 'function') updateList();
   });
 </script>
-
-<script src="JS/sidebar-loader.js"></script>
+<!--
+<script src="js/diary-data.js"></script>-->
+<script src="js/sidebar-loader.js"></script>
 
 </body>
 </html>
