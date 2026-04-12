@@ -139,38 +139,56 @@ for (let i = 0; i < count; i++) {
 <script>
     const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
 
+    // ★1. 新着日記を描画する「中身」をここに直接書いちゃうよ！
+    function renderRecentPosts() {
+        const container = document.getElementById('recent-posts');
+        if (!container || !window.diaryData) return;
+
+        // 最新5件を取り出す
+        const recent = window.diaryData.slice(0, 5);
+        let html = '';
+        
+        recent.forEach(item => {
+            // タイプに合わせてリンク先を変える
+            const link = item.type === "配信外" ? "post-off.html" : "post.html";
+            html += `
+                <a href="${link}?id=${item.id}" class="recent-post-item" style="display:block; margin-bottom:10px; text-decoration:none;">
+                    <div style="font-size:0.75rem; color:#888;">${item.date}</div>
+                    <div style="font-size:0.9rem; color:#555;">${item.title}</div>
+                </a>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // ★2. ページ全体の読み込みとリスト作成
     async function startPage() {
         try {
-            // 1. データを取得
             const response = await fetch(MY_GAS_URL);
             const allData = await response.json();
             window.diaryData = allData; 
 
-            // 2. 自分のページのリスト（配信外）を作る
-            // ★ここはもう成功してるから、そのまま「配信外」固定でOK
             const typeFilter = "配信外"; 
             const myPageData = allData.filter(item => item.type === typeFilter);
             myPageData.sort((a, b) => b.id - a.id);
+            
+            // 左側のリストを表示
             renderMyList(myPageData, typeFilter);
 
-            // 3. 【新着日記を出すための重要ポイント】
-            // サイドバーがHTMLとして読み込まれるまで「待機」して実行する
+            // 右側の新着日記を出す（サイドバーが出るまで粘る）
             let attempts = 0;
             const checkAndRender = setInterval(() => {
                 const target = document.getElementById('recent-posts');
-                // IDが見つかって、かつ表示関数(renderRecentPosts)が準備できていたら実行
-                if (target && typeof renderRecentPosts === 'function') {
+                if (target) {
                     renderRecentPosts();
                     clearInterval(checkAndRender);
                 }
-                // 30回（約6秒）探してダメなら止める
                 if (attempts++ > 30) clearInterval(checkAndRender);
             }, 200);
 
         } catch (e) { console.error("エラー:", e); }
     }
 
-    // リスト描画用（コードをスッキリさせるため分離したよ）
     function renderMyList(data, type) {
         const listContainer = document.getElementById('diary-list-container');
         if (!listContainer) return;
@@ -188,20 +206,8 @@ for (let i = 0; i < count; i++) {
         });
     }
 
-    window.addEventListener('load', async () => {
-    // 1. メイン（配信外）を表示する
-    await updateList(); 
-
-    // 2. サイドバーの読み込みを待ってから新着を出す魔法
-    // ローカルだとここで止まるけど、サーバー（pages.dev）に上げれば動くよ！
-    const checkSidebar = setInterval(() => {
-        const sidebarBox = document.getElementById('recent-posts');
-        if (sidebarBox && typeof renderRecentPosts === 'function') {
-            renderRecentPosts();
-            clearInterval(checkSidebar);
-        }
-    }, 500);
-});
+    // ページが開いたらスタート！
+    window.addEventListener('load', startPage);
 </script>
 
 </body>
