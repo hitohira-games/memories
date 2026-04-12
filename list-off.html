@@ -137,78 +137,72 @@ for (let i = 0; i < count; i++) {
 </script>
 
 <script>
-    // ★あなたのGASのURL
     const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
 
-    async function updateList() {
-        const params = new URLSearchParams(window.location.search);
-        const targetTag = params.get('tag'); 
-        
-        const listContainer = document.getElementById('diary-list-container');
-        const tagFilter = document.getElementById('dynamic-tags'); 
-        
-        if (!listContainer) return;
-
+    async function startPage() {
         try {
+            // 1. まずデータを取ってくる
             const response = await fetch(MY_GAS_URL);
             const allData = await response.json();
+            window.diaryData = allData; // 新着日記（サイドバー）用のデータ
 
-            // 現在のファイル名を取得（list.html か list-off.html か）
+            // 2. 自分のページのリスト（左側）を作る
             const currentFile = window.location.pathname.split("/").pop() || 'list.html';
-
-            // 1. ファイル名に合わせて「配信」か「配信外」かを自動判別
-            const typeFilter = currentFile === 'list-off.html' ? "配信外" : "配信";
-            const diaryData = allData.filter(item => item.type === typeFilter);
+            const typeFilter = "配信外";
             
-            diaryData.sort((a, b) => b.id - a.id);
+            const myPageData = allData.filter(item => item.type === typeFilter);
+            myPageData.sort((a, b) => b.id - a.id);
 
-            // 2. タグボタンを自動生成
-            if (tagFilter) {
-                const categories = [...new Set(diaryData.map(item => item.category))];
-                let tagHTML = `<a href="${currentFile}" class="${!targetTag ? 'active' : ''}">すべて</a>`;
-                categories.forEach(cat => {
-                    const isActive = (targetTag === cat) ? 'active' : '';
-                    tagHTML += `<a href="${currentFile}?tag=${encodeURIComponent(cat)}" class="tag-item ${isActive}">${cat}</a>`;
-                });
-                tagFilter.innerHTML = tagHTML;
-            }
+            // リストの描画（ここは今まで通り）
+            renderMyList(myPageData, typeFilter);
 
-            // 3. 記事リストを表示
-            listContainer.innerHTML = ''; 
-            const filteredByTag = targetTag ? diaryData.filter(item => item.category === targetTag) : diaryData;
+            // 3. 【ここが解決の鍵！】サイドバーのHTMLが届くのを「待って」から新着を出す
+            // sidebar.html が読み込まれるまで最大5秒間、0.2秒おきにチェックするよ
+            let retryCount = 0;
+            const checkSidebar = setInterval(() => {
+                const sidebarBox = document.getElementById('recent-posts'); // サイドバー内のID
+                if (sidebarBox && typeof renderRecentPosts === 'function') {
+                    renderRecentPosts(); // ここでやっと新着日記を表示！
+                    clearInterval(checkSidebar);
+                }
+                if (retryCount++ > 25) clearInterval(checkSidebar); // 諦め制限
+            }, 200);
 
-            filteredByTag.forEach(item => {
-                const card = document.createElement('a');
-                // リンク先を配信ルートか配信外ルートかで自動切り替え
-                const linkDest = typeFilter === "配信外" ? "post-off.html" : "post.html";
-                card.href = `${linkDest}?id=${item.id}`;
-                card.className = 'article-card';
-
-                card.innerHTML = `
-                    <div class="card-meta" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                        <span class="card-date" style="font-size: 0.85rem; color: #888;">${item.date}</span>
-                        <span class="tag-item2">${item.category}</span>
-                    </div>
-                    <h2 class="card-title">${item.title}</h2>
-                `;
-                listContainer.appendChild(card);
-            });
-
-            // 4. 見出しの更新
-            const pageTitle = document.querySelector('.list-page-title');
-            if (pageTitle) {
-                const titleText = typeFilter === "配信外" ? "配信外日記" : "配信日記";
-                pageTitle.innerText = targetTag ? `❄ ${targetTag} 一覧 ❄` : `❄ ${titleText} ❄`;
-            }
-
-        } catch (error) {
-            console.error("データの取得に失敗しました:", error);
-            listContainer.innerHTML = '<p>日記を読み込めませんでした。しばらく待ってから再読み込みしてください。</p>';
-        }
+        } catch (e) { console.error("エラー:", e); }
     }
 
-    window.addEventListener('load', updateList);
-    window.addEventListener('popstate', updateList);
+    // リスト描画用（コードをスッキリさせるため分離したよ）
+    function renderMyList(data, type) {
+        const listContainer = document.getElementById('diary-list-container');
+        if (!listContainer) return;
+        listContainer.innerHTML = '';
+        data.forEach(item => {
+            const card = document.createElement('a');
+            const linkDest = type === "配信外" ? "post-off.html" : "post.html";
+            card.href = `${linkDest}?id=${item.id}`;
+            card.className = 'article-card';
+            card.innerHTML = `
+                <div class="card-meta"><span class="card-date">${item.date}</span></div>
+                <h2 class="card-title">${item.title}</h2>
+            `;
+            listContainer.appendChild(card);
+        });
+    }
+
+    window.addEventListener('load', async () => {
+    // 1. メイン（配信外）を表示する
+    await updateList(); 
+
+    // 2. サイドバーの読み込みを待ってから新着を出す魔法
+    // ローカルだとここで止まるけど、サーバー（pages.dev）に上げれば動くよ！
+    const checkSidebar = setInterval(() => {
+        const sidebarBox = document.getElementById('recent-posts');
+        if (sidebarBox && typeof renderRecentPosts === 'function') {
+            renderRecentPosts();
+            clearInterval(checkSidebar);
+        }
+    }, 500);
+});
 </script>
 
 </body>
