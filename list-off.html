@@ -141,21 +141,22 @@ for (let i = 0; i < count; i++) {
 
     // ★1. 新着日記を描画する「中身」をここに直接書いちゃうよ！
     function renderRecentPosts() {
-        const container = document.getElementById('recent-posts-list');
+        const container = document.getElementById('recent-posts-list'); // ID合わせたよ！
         if (!container || !window.diaryData) return;
 
-        // 最新5件を取り出す
         const recent = window.diaryData.slice(0, 5);
         let html = '';
         
         recent.forEach(item => {
-            // タイプに合わせてリンク先を変える
             const link = item.type === "配信外" ? "post-off.html" : "post.html";
+            // ❄マークをつけて、ゆうちゃんのサイトのCSSクラスに合わせるよ
             html += `
-                <a href="${link}?id=${item.id}" class="recent-post-item" style="display:block; margin-bottom:10px; text-decoration:none;">
-                    <div style="font-size:0.75rem; color:#888;">${item.date}</div>
-                    <div style="font-size:0.9rem; color:#555;">${item.title}</div>
-                </a>
+                <li style="margin-bottom: 12px; list-style: none;">
+                    <a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit; display: block;">
+                        <span style="color: #5a8a6a; margin-right: 5px;">❄</span>
+                        <span style="font-size: 0.9rem;">${item.title}</span>
+                    </a>
+                </li>
             `;
         });
         container.innerHTML = html;
