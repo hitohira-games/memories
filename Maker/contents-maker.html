@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>❄ 淡雪日記メーカー ❄</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #f0f8ff; /* 淡いアリスブルー */
+    --card-bg: #ffffff;
+    --text-color: #556b2f; /* 柔らかいオリーブグリーン */
+    --accent-color: #ffb6c1; /* パステルピンク */
+    --accent-hover: #ffc0cb;
+    --btn-bg: #e0ffff; /* パステルターコイズ */
+    --btn-text: #4682b4; /* 落ち着いたスチールブルー */
+    --border-radius: 20px; /* 角丸！ */
+  }
+
+  body {
+    font-family: 'Klee One', cursive; /* 全体を柔らかいフォントに */
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 30px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .maker-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 25px rgba(165, 196, 222, 0.2); /* ほんのり青い影 */
+    width: 100%;
+    max-width: 700px;
+  }
+
+  h2 {
+    color: var(--btn-text);
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.8rem;
+  }
+
+  p { margin: 10px 0 5px; font-size: 0.95rem; }
+
+  /* 入力欄のデザイン */
+  input[type="text"], textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(165, 196, 222, 0.3);
+    border-radius: 12px; /* 少し角丸 */
+    font-family: 'Klee One', cursive;
+    font-size: 1rem;
+    color: var(--text-color);
+    box-sizing: border-box; /* 枠線を含めたサイズにする */
+    transition: border-color 0.2s;
+  }
+
+  input[type="text"]:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-color); /* フォーカスでピンクに */
+  }
+
+  textarea { height: 250px; resize: vertical; margin-bottom: 15px; }
+
+  /* ボタンエリア */
+  .button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+
+  /* 基本のボタンデザイン（角丸パステル） */
+  button {
+    font-family: 'Klee One', cursive;
+    padding: 10px 22px;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+
+  /* 生成ボタン（パステルターコイズ） */
+  .generate-btn {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+  }
+  .generate-btn:hover { background-color: #d1f7f7; transform: translateY(-1px); }
+
+  /* スクショボタン（パステルピンク） */
+  .ss-btn {
+    background-color: var(--accent-color);
+    color: white;
+  }
+  .ss-btn:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
+
+  /* 結果表示エリア */
+  .result-area {
+    margin-top: 20px;
+  }
+
+  h3 { color: var(--btn-text); font-size: 1.2rem; margin-bottom: 10px; }
+
+  .result-box {
+    background: #f9fcfd;
+    padding: 20px;
+    border: 2px dashed rgba(165, 196, 222, 0.5); /* 点線 */
+    border-radius: var(--border-radius);
+    white-space: pre-wrap; /* 改行をそのまま表示 */
+    font-family: monospace; /* ここだけコード用フォント */
+    font-size: 0.9rem;
+    color: #333;
+    position: relative;
+    max-height: 200px;
+    overflow-y: auto; /* 長くなったらスクロール */
+  }
+
+  /* コピー完了メッセージ */
+  .copy-msg {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(85, 107, 47, 0.8);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+  <div class="maker-card">
+    <h2>❄ 淡雪日記メーカー ❄</h2>
+    
+    <p>ID（日付など）: <input type="text" id="postId" placeholder="20260410"></p>
+    
+    <p>本文を書いてね（改行は自動でpタグになります）:</p>
+    <textarea id="bodyText" placeholder="今日はFF14で……"></textarea>
+    
+    <div class="button-group">
+      <button class="ss-btn" onclick="addScreenshot()">🖼 スクショを追加</button>
+      <button class="generate-btn" onclick="generate()">コードを作成！</button>
+    </div>
+
+    <div class="result-area" id="resultArea" style="display:none;">
+      <h3>↓ これを diary-contents.js にコピペしてね</h3>
+      <div class="result-box" id="output">
+        <span class="copy-msg" id="copyMsg">コピーしたよ！</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. スクリーンショットのタグを挿入する関数
+    function addScreenshot() {
+      const textarea = document.getElementById('bodyText');
+      const cursorPos = textarea.selectionStart;
+      const textBefore = textarea.value.substring(0, cursorPos);
+      const textAfter = textarea.value.substring(textarea.selectionEnd, textarea.value.length);
+      
+      // ゆうちゃんのサイトのSS用HTML構造（placeholder版）
+      const ssTag = `
+<div class="article-screenshots">
+  <figure class="screenshot-item">
+    <div class="screenshot-placeholder">
+      <span class="ph-icon">🖼</span>
+      <span>スクリーンショット（例：ここに画像）</span>
+    </div>
+    <figcaption class="screenshot-caption">ここにキャプションを書いてね</figcaption>
+  </figure>
+</div>
+`;
+      
+      // カーソル位置に挿入
+      textarea.value = textBefore + ssTag + textAfter;
+      // カーソル位置を挿入したタグの直後に移動
+      textarea.selectionStart = textarea.selectionEnd = cursorPos + ssTag.length;
+      textarea.focus();
+    }
+
+    // 2. 最終的なコードを生成する関数
+    function generate() {
+      const id = document.getElementById('postId').value;
+      const text = document.getElementById('bodyText').value;
+      
+      if (!id || !text) {
+        alert("IDと本文は両方入れてね❄️");
+        return;
+      }
+
+      // 文章を解析して、HTMLタグを整理するよ
+      const lines = text.split('\n');
+      let resultHtml = '';
+      let isInsideSs = false;
+
+      lines.forEach(line => {
+        if (line.trim() === '') return; // 空行は飛ばす
+
+        // スクショのタグが始まったかチェック
+        if (line.includes('<div class="article-screenshots">')) {
+          isInsideSs = true;
+          resultHtml += `    ${line}\n`;
+          return;
+        }
+        // スクショのタグが終わったかチェック
+        if (line.includes('</div>') && isInsideSs) {
+          isInsideSs = false;
+          resultHtml += `    ${line}\n`;
+          return;
+        }
+
+        // スクショのタグ内なら、そのまま追加
+        if (isInsideSs) {
+          resultHtml += `    ${line}\n`;
+        } else {
+          // 普通の文章なら、<p>タグで囲む
+          resultHtml += `    <p>${line}</p>\n`;
+        }
+      });
+      
+      // diary-contents.js用のフォーマットに整形
+      const finalResult = `"${id}": \`
+${resultHtml}
+  \`,`;
+      
+      const outputDiv = document.getElementById('output');
+      // テキストエリアに表示（テキストとして表示させるため、あえてテキストノードとして追加）
+      outputDiv.textContent = finalResult;
+      
+      // 結果エリアを表示
+      document.getElementById('resultArea').style.display = 'block';
+
+      // 自動でコピー
+      navigator.clipboard.writeText(finalResult).then(() => {
+        const msg = document.getElementById('copyMsg');
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 1500); // 1.5秒で消す
+      });
+    }
+  </script>
+</body>
+</html>

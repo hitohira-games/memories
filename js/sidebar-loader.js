@@ -1,44 +1,64 @@
-// サイドバーを読み込んで新着を出す魔法のセット
-function loadSidebar() {
-  fetch("partials/sidebar.html")
-    .then(response => response.text())
-    .then(data => {
-      const container = document.getElementById("sidebar-container");
-      if (container) {
-        container.innerHTML = data;
-        if (typeof diaryData !== 'undefined') {
-          renderRecentPosts();
-        }
-      }
-    });
+async function loadSidebar() {
+  try {
+    const response = await fetch("partials/sidebar.html");
+    const html = await response.text();
+    const container = document.getElementById("sidebar-container");
+    if (container) {
+      container.innerHTML = html;
+      console.log("★1: サイドバーの枠組み読み込み完了！");
+      await renderRecentPostsFromGAS();
+    }
+  } catch (err) {
+    console.error("★サイドバー枠エラー:", err);
+  }
 }
 
-function renderRecentPosts() {
-  const listContainer = document.getElementById('recent-posts');
-  if (!listContainer) return;
+async function renderRecentPostsFromGAS() {
+  const listContainer = document.getElementById('recent-posts-list');
+  if (!listContainer) {
+    console.error("★エラー: recent-posts-list がHTMLに見当たらないよ！");
+    return;
+  }
 
-  // 1. 最新の3つを取得
-  const latestPosts = diaryData.slice(0, 3);
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
 
-  // 2. リストの中身を作る（❄の色分けと文字サイズ0.9remを徹底！）
-  const listHtml = latestPosts.map(post => {
-    // 配信日記(true)ならrecent-snow1、配信外(false)ならrecent-snow2
-    const snowClass = post.isLive ? 'recent-snow1' : 'recent-snow2';
+  try {
+    console.log("★2: GASにデータを取りに行くよ...");
+    const res = await fetch(GAS_URL);
+    const allData = await res.json();
     
-    return `
-      <li style="list-style: none; margin-bottom: 12px; line-height: 1.4; font-size: 0.9rem;">
-        <span class="${snowClass}" style="margin-right: 5px;">❄</span>
-        <a href="post.html?id=${post.id}" style="color: inherit; text-decoration: none;">
-          ${post.title}
-        </a>
-      </li>
-    `;
-  }).join('');
+    console.log("★3: GASから届いた全データ:", allData);
 
-  // 3. 他を消さないように、ulタグの中身「だけ」を書き換える
-  listContainer.style.paddingLeft = "0";
-  listContainer.innerHTML = listHtml;
+    if (!allData || allData.length === 0) {
+      console.log("★4: データが空っぽみたい...");
+      listContainer.innerHTML = "<li>記事がまだありません</li>";
+      return;
+    }
+
+    // IDで並び替えて最新3件
+    const latestPosts = allData.sort((a, b) => Number(b.id) - Number(a.id)).slice(0, 3);
+    console.log("★5: 表示する3件はこれ:", latestPosts);
+
+    let html = '';
+    latestPosts.forEach(post => {
+      const snowClass = (post.type === "配信") ? 'recent-snow1' : 'recent-snow2';
+      const linkDest = (post.type === "配信外") ? 'post-off.html' : 'post.html';
+      html += `
+        <li style="margin-bottom: 12px; line-height: 1.4; list-style: none;">
+          <span class="${snowClass}" style="margin-right: 5px;">❄</span>
+          <a href="${linkDest}?id=${post.id}" style="color: inherit; text-decoration: none;">
+            ${post.title}
+          </a>
+        </li>`;
+    });
+
+    listContainer.innerHTML = html;
+    console.log("★6: 画面に新着日記を出したよ！");
+
+  } catch (e) {
+    console.error("★7: GASの読み込みで失敗したよ:", e);
+    listContainer.innerHTML = "<li>読み込みエラーが発生しました</li>";
+  }
 }
 
-// ページが開いたら自動で動くようにする
 document.addEventListener("DOMContentLoaded", loadSidebar);

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌿 葉露データメーカー 🌿</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #f2f9f2; /* 淡いパステルグリーン（ハーブティーみたいな色） */
+    --card-bg: #ffffff;
+    --text-color: #556b2f;
+    --accent-color: #8fbc8f; /* ダークシーグリーン（落ち着いた緑） */
+    --accent-hover: #98fb98;
+    --btn-bg: #e6f3ff; /* 少しだけ青みを混ぜてスッキリ */
+    --btn-text: #4e7d4e;
+    --border-radius: 20px;
+  }
+
+  body {
+    font-family: 'Klee One', cursive;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 30px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .maker-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 25px rgba(143, 188, 143, 0.15);
+    width: 100%;
+    max-width: 700px;
+  }
+
+  h2 { color: var(--btn-text); text-align: center; margin-top: 0; }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  .full-width { grid-column: span 2; }
+
+  p { margin: 10px 0 5px; font-size: 0.95rem; font-weight: 600; }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(143, 188, 143, 0.2);
+    border-radius: 12px;
+    font-family: 'Klee One', cursive;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.2s;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: #fafdfa;
+  }
+
+  textarea { height: 80px; resize: vertical; }
+
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    background: #f9fdf9;
+    border-radius: 12px;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+  }
+
+  .generate-btn {
+    font-family: 'Klee One', cursive;
+    padding: 12px 40px;
+    cursor: pointer;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(143, 188, 143, 0.3);
+  }
+
+  .generate-btn:hover { background-color: #7dad7d; transform: translateY(-1px); }
+
+  .result-area { margin-top: 25px; }
+  .result-box {
+    background: #ffffff;
+    padding: 20px;
+    border: 2px dashed var(--accent-color);
+    border-radius: var(--border-radius);
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 0.9rem;
+    position: relative;
+  }
+
+  .copy-msg {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--btn-text);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+  <div class="maker-card">
+    <h2>🌿 葉露データメーカー 🌿</h2>
+    
+    <div class="input-grid">
+      <div>
+        <p>ID (英数字):</p>
+        <input type="text" id="postId" placeholder="20260410">
+      </div>
+      <div>
+        <p>日付 (YYYY/MM/DD):</p>
+        <input type="text" id="postDate" placeholder="2026/04/10">
+      </div>
+      <div class="full-width">
+        <p>記事タイトル:</p>
+        <input type="text" id="postTitle" placeholder="FF14配信日記 2026/04/10">
+      </div>
+      <div>
+        <p>カテゴリー (タグ):</p>
+        <input type="text" id="postCat" placeholder="配信日記">
+      </div>
+      <div>
+        <p>日記タイプ:</p>
+        <div class="radio-group">
+          <label><input type="radio" name="isLive" value="true" checked> 配信日記 ❄</label>
+          <label><input type="radio" name="isLive" value="false"> 配信外 ❄</label>
+        </div>
+      </div>
+      <div class="full-width">
+        <p>一言 (リストに表示される説明文):</p>
+        <textarea id="postContent" placeholder="今日は漆黒のあのシーンまで進めました..."></textarea>
+      </div>
+    </div>
+    
+    <div class="btn-container">
+      <button class="generate-btn" onclick="generate()">データ用コードを作成！</button>
+    </div>
+
+    <div class="result-area" id="resultArea" style="display:none;">
+      <div class="result-box" id="output">
+        <span class="copy-msg" id="copyMsg">コピー完了🌿</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function generate() {
+      const id = document.getElementById('postId').value;
+      const date = document.getElementById('postDate').value;
+      const title = document.getElementById('postTitle').value;
+      const cat = document.getElementById('postCat').value;
+      const content = document.getElementById('postContent').value;
+      const isLive = document.querySelector('input[name="isLive"]:checked').value;
+      
+      if (!id || !title) { alert("IDとタイトルは入れてね🌿"); return; }
+
+      const finalResult = `  {
+    id: "${id}",
+    date: "${date}",
+    title: "${title}",
+    category: "${cat}",
+    content: "${content}",
+    isLive: ${isLive}
+  },`;
+      
+      const outputDiv = document.getElementById('output');
+      outputDiv.textContent = finalResult;
+      document.getElementById('resultArea').style.display = 'block';
+
+      navigator.clipboard.writeText(finalResult).then(() => {
+        const msg = document.getElementById('copyMsg');
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 1500);
+      });
+    }
+  </script>
+</body>
+</html>

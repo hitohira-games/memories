@@ -53,7 +53,7 @@
       <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
       <div class="deco-line"></div>
     </div>
-    <p class="site-subtitle">hitohira-games.pages.dev</p>
+    <p class="site-subtitle">hitohira-games.netlify.ap</p>
   </header>
 
   <!-- ナビ -->
@@ -109,107 +109,120 @@
 
     <a id="ICHIRAN_BTN" href="list.html" class="article-nav-btn" style="display: block; text-decoration: none; text-align: center;">
       <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">❄ カテゴリー一覧</span><br>
-      <div id="dynamic-tags" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px;">
-  カテゴリーを読み込んでいます...
-</div>
+      <span id="related-tag-text" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
     </a>
   </div>
   </article>
 
  <!-- サイドバー -->
- <div id="sidebar-container"></div>
-  <script>
-    fetch("partials/sidebar.html")
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById("sidebar-container").innerHTML = data;
-      });
-  </script>
+   <div id="sidebar-container"></div>
+<script>
+  fetch("partials/sidebar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("sidebar-container").innerHTML = data;
+    });
+</script>
 
+   
   <footer class="fade-in">
     <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
-    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.pages.dev</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.netlify.ap</p>
   </footer>
 </div>
 
 <script>
-  // 1. 雪の演出
-  (function() {
-    const box = document.getElementById('snowContainer');
-    if(!box) return;
-    const icons = ['❄','❅','❆','✦','✧'];
-    for (let i = 0; i < 22; i++) {
-      const el = document.createElement('span');
-      el.classList.add('snowflake');
-      el.textContent = icons[Math.floor(Math.random() * icons.length)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
-      el.style.animationDuration = (10 + Math.random() * 18) + 's';
-      el.style.opacity = 0;
-      box.appendChild(el);
-    }
-  })();
-
-  // 2. GAS連携のURL
-  const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
-
-  // --- 関数A：記事本文を読み込む ---
-  async function loadDiary() {
-    console.log("★loadDiary開始");
-    const p = new URLSearchParams(window.location.search);
-    const id = p.get('id');
-    if (!id) return;
-
-    try {
-      const res = await fetch(MY_GAS_URL);
-      const rows = await res.json();
-      const d = rows.find(item => String(item.id) === String(id));
-      
-      if (!d) {
-        document.getElementById('post-title').innerText = "記事が見つかりません";
-        return;
-      }
-
-      document.title = d.title + " — ❄ ゲームひとひら綴り ❄";
-      document.getElementById('post-title').innerText = d.title;
-      document.getElementById('post-date').innerText = d.date;
-      document.getElementById('breadcrumb-title').innerText = d.title;
-      document.getElementById('post-tag-display').innerText = "#" + d.category;
-      
-      const body = document.getElementById('list-content');
-      if (body) body.innerHTML = String(d.body).replace(/\n/g, '<br>');
-      console.log("★本文の表示完了！");
-    } catch (e) { console.error(e); }
-  }
-
-  // --- 関数B：カテゴリー一覧を読み込む ---
-  async function loadCategoryList() {
-    console.log("★カテゴリー一覧の作成開始");
-    const container = document.getElementById('dynamic-tags'); 
-    if (!container) return;
-
-    try {
-      const res = await fetch(MY_GAS_URL);
-      const allData = await res.json();
-      const categories = [...new Set(allData.map(item => item.category))];
-      
-      let html = '';
-      categories.forEach(cat => {
-          html += `<a href="list.html?tag=${encodeURIComponent(cat)}" class="tag-item" style="text-decoration:none; background:rgba(255,255,255,0.5); padding:5px 12px; border-radius:15px; font-size:0.85rem; color:#3378C1; border:1px solid #88ceeb;">#${cat}</a>`;
-      });
-      container.innerHTML = html;
-      console.log("★カテゴリーの表示完了！");
-    } catch (e) { console.error(e); }
-  }
-
-  // 3. ページが開いたら「本文」と「カテゴリー」を同時に実行！
-  window.addEventListener('load', () => {
-      loadDiary();
-      loadCategoryList();
-  });
+const container = document.getElementById('snowContainer');
+const symbols = ['❄','❅','❆','✦','✧'];
+const count = 22;
+for (let i = 0; i < count; i++) {
+  const el = document.createElement('span');
+  el.classList.add('snowflake');
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
+  el.style.animationDuration = (10 + Math.random() * 18) + 's';
+  el.style.animationDelay = (Math.random() * 15) + 's';
+  el.style.opacity = 0;
+  container.appendChild(el);
+}
 </script>
 
-<script src="JS/sidebar-loader.js"></script>
+<script src="js/diary-data.js?v=2" defer></script>
+<script src="js/diary-contents.js?v=2" defer></script>
+
+<script>
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const params = new URLSearchParams(window.location.search);
+            const currentId = params.get('id') || "20260407";
+
+            // --- 1. 本文を表示 ---
+            if (typeof diaryContents !== 'undefined') {
+                const content = diaryContents[currentId];
+                const contentEl = document.getElementById('list-content');
+                if (contentEl && content) {
+                    contentEl.innerHTML = (typeof content === 'string') ? content : (content.content || String(content));
+                }
+            }
+
+            // --- 2. データの反映 ---
+            if (typeof diaryData !== 'undefined') {
+                const d = diaryData.find(item => String(item.id) === String(currentId));
+                
+                if (d) {
+                    if (document.getElementById('post-title')) document.getElementById('post-title').innerText = d.title;
+                    if (document.getElementById('post-date')) document.getElementById('post-date').innerText = d.date;
+                    if (document.getElementById('breadcrumb-title')) document.getElementById('breadcrumb-title').innerText = d.title;
+                    if (document.getElementById('post-tag-display')) document.getElementById('post-tag-display').innerText = "#" + d.category;
+                    
+                    // ★ここ！HTMLに最初からある「related-tag-text」の文字だけを変えるよ
+                    const relText = document.getElementById('related-tag-text');
+                    if (relText) {
+                        relText.innerText = "❄ " + d.category + "日記一覧へ";
+                    }
+                    // カテゴリ一覧ボタンに「?tag=カテゴリ名」をくっつけるよ
+                    const relBtn = document.getElementById('ICHIRAN_BTN');
+                    if (relBtn) {
+                        relBtn.href = `list.html?tag=${encodeURIComponent(d.category)}`;
+                    }
+                }
+
+               // --- 3. 前後ボタンの設定（新しい順に合わせたよ！） ---
+                const idx = diaryData.findIndex(item => String(item.id) === String(currentId));
+                const btnP = document.getElementById('MAE');
+                const btnN = document.getElementById('TSUGI');
+
+                if (btnP && btnN) {
+                    const safeIdx = (idx === -1) ? 0 : idx;
+
+                    // 【前へ（過去へ）】 indexを増やす（リストの下へ行く）
+                    if (safeIdx < diaryData.length - 1) {
+                        const prev = diaryData[safeIdx + 1];
+                        btnP.href = `post.html?id=${prev.id}`;
+                        if (document.getElementById('MAE_T')) document.getElementById('MAE_T').innerText = prev.title;
+                        btnP.style.visibility = 'visible';
+                    } else {
+                        btnP.style.visibility = 'hidden'; // 一番古い記事なら「前へ」を隠す
+                    }
+
+                    // 【次へ（最新へ）】 indexを減らす（リストの上へ戻る）
+                    if (safeIdx > 0) {
+                        const next = diaryData[safeIdx - 1];
+                        btnN.href = `post.html?id=${next.id}`;
+                        if (document.getElementById('TSUGI_T')) document.getElementById('TSUGI_T').innerText = next.title;
+                        btnN.style.visibility = 'visible';
+                    } else {
+                        btnN.style.visibility = 'hidden'; // 最新の記事なら「次へ」を隠す
+                    }
+                }
+            }
+        }, 300);
+    });
+</script>
+
+<script src="js/diary-data.js"></script>
+<script src="js/sidebar-loader.js"></script>
 
 </body>
 </html>

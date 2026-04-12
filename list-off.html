@@ -53,7 +53,7 @@
       <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
       <div class="deco-line"></div>
     </div>
-    <p class="site-subtitle">hitohira-games.netlify.ap</p>
+    <p class="site-subtitle">hitohira-games.pages.dev</p>
   </header>
 
   <!-- ナビ -->
@@ -114,7 +114,8 @@
 
   <footer class="fade-in">
     <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
-    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.netlify.ap</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.pages.dev
+    </p>
   </footer>
 </div>
 
@@ -135,44 +136,54 @@ for (let i = 0; i < count; i++) {
 }
 </script>
 
-<script src="js/diary-data-off.js"></script>
-
 <script>
-    function updateList() {
+    // ★あなたのGASのURL
+    const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
+
+    async function updateList() {
         const params = new URLSearchParams(window.location.search);
         const targetTag = params.get('tag'); 
         
         const listContainer = document.getElementById('diary-list-container');
         const tagFilter = document.getElementById('dynamic-tags'); 
         
-        if (!listContainer || typeof diaryData === 'undefined') return;
+        if (!listContainer) return;
 
-        // --- 1. タグボタンを自動生成する ---
-        if (tagFilter) {
-            // データからカテゴリ名を重複なしで取り出す
-            const categories = [...new Set(diaryData.map(item => item.category))];
-            
-            // 「すべて」ボタンを作る
-            let tagHTML = `<a href="list-off.html" class="${!targetTag ? 'active' : ''}">すべて</a>`;
-            
-            // カテゴリごとのボタンを作る
-            categories.forEach(cat => {
-                const isActive = (targetTag === cat) ? 'active' : '';
-                tagHTML += `<a href="list-off.html?tag=${encodeURIComponent(cat)}" class="${isActive}">${cat}</a>`;
-            });
-            
-            tagFilter.innerHTML = tagHTML;
-        }
+        try {
+            const response = await fetch(MY_GAS_URL);
+            const allData = await response.json();
 
-        // --- 2. 記事リストを絞り込んで表示する ---
-        listContainer.innerHTML = ''; 
-        diaryData.forEach(item => {
-            if (!targetTag || item.category === targetTag) {
+            // 現在のファイル名を取得（list.html か list-off.html か）
+            const currentFile = window.location.pathname.split("/").pop() || 'list.html';
+
+            // 1. ファイル名に合わせて「配信」か「配信外」かを自動判別
+            const typeFilter = currentFile === 'list-off.html' ? "配信外" : "配信";
+            const diaryData = allData.filter(item => item.type === typeFilter);
+            
+            diaryData.sort((a, b) => b.id - a.id);
+
+            // 2. タグボタンを自動生成
+            if (tagFilter) {
+                const categories = [...new Set(diaryData.map(item => item.category))];
+                let tagHTML = `<a href="${currentFile}" class="${!targetTag ? 'active' : ''}">すべて</a>`;
+                categories.forEach(cat => {
+                    const isActive = (targetTag === cat) ? 'active' : '';
+                    tagHTML += `<a href="${currentFile}?tag=${encodeURIComponent(cat)}" class="tag-item ${isActive}">${cat}</a>`;
+                });
+                tagFilter.innerHTML = tagHTML;
+            }
+
+            // 3. 記事リストを表示
+            listContainer.innerHTML = ''; 
+            const filteredByTag = targetTag ? diaryData.filter(item => item.category === targetTag) : diaryData;
+
+            filteredByTag.forEach(item => {
                 const card = document.createElement('a');
-                card.href = `post.html?id=${item.id}`;
+                // リンク先を配信ルートか配信外ルートかで自動切り替え
+                const linkDest = typeFilter === "配信外" ? "post-off.html" : "post.html";
+                card.href = `${linkDest}?id=${item.id}`;
                 card.className = 'article-card';
 
-                // ★ここから下を、この通りに書き換えて！
                 card.innerHTML = `
                     <div class="card-meta" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
                         <span class="card-date" style="font-size: 0.85rem; color: #888;">${item.date}</span>
@@ -180,25 +191,25 @@ for (let i = 0; i < count; i++) {
                     </div>
                     <h2 class="card-title">${item.title}</h2>
                 `;
-                // ★ここまで！
-
                 listContainer.appendChild(card);
-            }
-        });
+            });
 
-        // --- 3. 見出しの更新（ループの外に出したよ！） ---
-        const pageTitle = document.querySelector('.list-page-title');
-        if (pageTitle) {
-            pageTitle.innerText = targetTag ? `❄ ${targetTag} 一覧 ❄` : "❄ 配信外日記 ❄";
+            // 4. 見出しの更新
+            const pageTitle = document.querySelector('.list-page-title');
+            if (pageTitle) {
+                const titleText = typeFilter === "配信外" ? "配信外日記" : "配信日記";
+                pageTitle.innerText = targetTag ? `❄ ${targetTag} 一覧 ❄` : `❄ ${titleText} ❄`;
+            }
+
+        } catch (error) {
+            console.error("データの取得に失敗しました:", error);
+            listContainer.innerHTML = '<p>日記を読み込めませんでした。しばらく待ってから再読み込みしてください。</p>';
         }
     }
 
     window.addEventListener('load', updateList);
     window.addEventListener('popstate', updateList);
 </script>
-
-<script src="js/diary-data.js"></script>
-<script src="js/sidebar-loader.js"></script>
 
 </body>
 </html>

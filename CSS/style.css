@@ -971,6 +971,11 @@ footer {
 }
 
 /* 本文カード */
+.article-body {
+    white-space: pre-wrap; /* これを入れると、連続した改行もそのまま表示されます */
+    word-wrap: break-word; /* 長い英単語があっても枠からはみ出しません */
+}
+
 .article-body-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);

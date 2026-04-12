@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FF14配信日記 2026/04/07 — ❄ ゲームひとひら綴り ❄</title>
+<title>配信日記一覧 — ❄ ゲームひとひら綴り ❄</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="CSS/style.css">
@@ -53,107 +53,43 @@
       <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
       <div class="deco-line"></div>
     </div>
-    <p class="site-subtitle">hitohira-games.pages.dev</p>
+    <p class="site-subtitle">hitohira-games.netlify.ap</p>
   </header>
 
   <!-- ナビ -->
   <nav class="fade-in fade-in-delay-1">
-    <a href="#" class="active">配信日記</a>
-    <a href="#">配信外日記</a>
-    <a href="#">今まで遊んだゲーム</a>
-    <a href="#">プロフィール</a>
-  </nav>
+  <a href="list.html">配信日記</a>
+  <a href="list-off.html">配信外日記</a>
+  <a href="games.html">今まで遊んだゲーム</a>
+  <a href="profile.html">プロフィール</a>
+</nav>
 
   <!-- メイン -->
   <div class="main-grid fade-in fade-in-delay-2">
 
-    <!-- 左：記事本文 -->
-    <article>
+    <!-- 左：記事一覧 -->
+   <main>
+  <div class="list-heading">
+    <p class="breadcrumb"><a href="index.html">トップ</a><span>›</span>配信日記</p>
+    
+    <h1 class="list-page-title"><span class="title-snow1">❄</span>配信日記</h1>
+    <p class="list-details">リンク先で全文が読めます</p>
+    
+    <div class="tag-filter" id="dynamic-tags">
+  </div>
+  </div>
 
-      <p class="breadcrumb">
-        <a href="index.html">トップ</a><span>›</span>
-        <a href="list.html">配信日記</a><span>›</span>
-        FF14配信日記 2026/04/07
-      </p>
+  <div class="article-list" id="diary-list-container">
+  </div>
 
-      <div class="article-header">
-        <div class="article-meta-top">
-          <span class="article-category">配信日記</span>
-          <span class="article-date">2026年4月7日</span>
-        </div>
-        <h1 class="article-title">FF14配信日記 2026/04/07</h1>
-        <div class="article-tags">
-          <a href="#" class="article-tag">#FF14</a>
-          <a href="#" class="article-tag">#漆黒のヴィランズ</a>
-          <a href="#" class="article-tag">#MMORPG</a>
-        </div>
-      </div>
+  <div class="pagination">
+    <a href="#" class="page-btn current">1</a>
+    <a href="#" class="page-btn">2</a>
+    <a href="#" class="page-btn">›</a>
+  </div>
+</main>
 
-      <!-- 本文 -->
-      <div class="article-body-card">
-        <div class="article-body">
-
-          <p>今日の配信は漆黒のヴィランズ、クライマックス手前まで進めた。ここまで来るのに何ヶ月かかったんだろう、と思いながら進めていた。</p>
-
-          <div class="article-screenshots">
-            <figure class="screenshot-item">
-              <div class="screenshot-placeholder">
-                <span class="ph-icon">🖼</span>
-                <span>スクリーンショット（例：夜のシナリオシーン）</span>
-              </div>
-              <figcaption class="screenshot-caption">このシーン、光の当たり方がとても綺麗だった</figcaption>
-            </figure>
-          </div>
-
-          <p>例のシーンはやっぱり泣いてしまった。リスナーさんも一緒に静かになってくれていて、配信全体がふわっとした空気になったのが嬉しかった。</p>
-
-          <p>途中、戦闘で何度か詰まりかけたけど、なんとか無事に先へ進めた。次回はいよいよ終盤に入る。続きが怖いような、楽しみなような気持ち。</p>
-
-          <div class="article-screenshots">
-            <figure class="screenshot-item">
-              <div class="screenshot-placeholder">
-                <span class="ph-icon">🖼</span>
-                <span>スクリーンショット（例：戦闘シーン）</span>
-              </div>
-              <figcaption class="screenshot-caption">このボス戦、何度か全滅した</figcaption>
-            </figure>
-          </div>
-
-          <p>今日も見に来てくれたリスナーさん、ありがとうございました。次回もよろしくお願いします。</p>
-
-        </div>
-
-        <p class="article-footer-note">
-          ❄ &nbsp; 感想は <a href="#">X（旧Twitter）</a> や配信で教えてもらえたら嬉しいです。&nbsp; ❄
-        </p>
-      </div>
-
-      <!-- 前後ナビ -->
-      <nav class="article-nav">
-        <a href="#" class="article-nav-btn prev">
-          <span class="nav-direction">‹ 前の記事</span>
-          <span class="nav-title">FF14配信日記 2026/04/03</span>
-        </a>
-        <a href="#" class="article-nav-btn next">
-          <span class="nav-direction">次の記事 ›</span>
-          <span class="nav-title">スターサンド日記 2026/04/10</span>
-        </a>
-      </nav>
-
-      <!-- 同タグ記事 -->
-      <div class="related-section">
-        <p class="related-heading">❄ 同じタグの記事（#FF14）</p>
-        <ul class="related-list">
-          <li class="related-item"><a href="#">
-            <span class="rel-snow">❄</span>
-            <span><span class="rel-title">FF14日記一覧</span></span>
-          </a></li>
-        </ul>
-      </div>
-
-    </article>
-
- <!-- サイドバー -->
+    <!-- サイドバー -->
    <div id="sidebar-container"></div>
 <script>
   fetch("/partials/sidebar.html")
@@ -162,11 +98,23 @@
       document.getElementById("sidebar-container").innerHTML = data;
     });
 </script>
+<!-- 下タグ一覧
+      <div class="card" style="margin-bottom:18px">
+        <p class="card-title">❄ タグ</p>
+        <div class="tag-cloud">
+          <a href="#" class="tag-item">#FF14</a>
+          <a href="#" class="tag-item">#スターサンド</a>
+          <a href="#" class="tag-item">#Elin</a>
+          <a href="#" class="tag-item">#Skyrim</a>
+          <a href="#" class="tag-item">#RPG</a>
+          <a href="#" class="tag-item">#オープンワールド</a>
+        </div>
+      </div>
+    -->
 
-   
   <footer class="fade-in">
     <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
-    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.pages.dev</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.netlify.ap</p>
   </footer>
 </div>
 
@@ -186,5 +134,65 @@ for (let i = 0; i < count; i++) {
   container.appendChild(el);
 }
 </script>
+
+<script src="js/diary-data.js"></script>
+
+<script>
+    function updateList() {
+        const params = new URLSearchParams(window.location.search);
+        const targetTag = params.get('tag'); 
+        
+        const listContainer = document.getElementById('diary-list-container');
+        const tagFilter = document.getElementById('dynamic-tags'); 
+        
+        if (!listContainer || typeof diaryData === 'undefined') return;
+
+        // --- 1. タグボタンを自動生成する ---
+        if (tagFilter) {
+            const categories = [...new Set(diaryData.map(item => item.category))];
+            let tagHTML = `<a href="list.html" class="${!targetTag ? 'active' : ''}">すべて</a>`;
+            categories.forEach(cat => {
+                const isActive = (targetTag === cat) ? 'active' : '';
+                tagHTML += `<a href="list.html?tag=${encodeURIComponent(cat)}" class="${isActive}">${cat}</a>`;
+            });
+            tagFilter.innerHTML = tagHTML;
+        }
+
+       // --- 2. 記事リストを絞り込んで表示する ---
+        listContainer.innerHTML = ''; 
+        diaryData.forEach(item => {
+            if (!targetTag || item.category === targetTag) {
+                const card = document.createElement('a');
+                card.href = `post.html?id=${item.id}`;
+                card.className = 'article-card';
+
+                // ★ここから下を、この通りに書き換えて！
+                card.innerHTML = `
+                    <div class="card-meta" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span class="card-date" style="font-size: 0.85rem; color: #888;">${item.date}</span>
+                        <span class="tag-item2">${item.category}</span>
+                    </div>
+                    <h2 class="card-title">${item.title}</h2>
+                `;
+                // ★ここまで！
+
+                listContainer.appendChild(card);
+            }
+        });
+
+        // --- 3. 見出しの更新（ループの外に出したよ！） ---
+        const pageTitle = document.querySelector('.list-page-title');
+        if (pageTitle) {
+            pageTitle.innerText = targetTag ? `❄ ${targetTag} 一覧 ❄` : "❄ 配信日記 ❄";
+        }
+    }
+
+    window.addEventListener('load', updateList);
+    window.addEventListener('popstate', updateList);
+</script>
+
+<script src="js/diary-data.js"></script>
+<script src="js/sidebar-loader.js"></script>
+
 </body>
 </html>
