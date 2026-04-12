@@ -150,15 +150,15 @@ for (let i = 0; i < count; i++) {
         recent.forEach(item => {
             const isOff = (item.type === "配信外");
             const link = isOff ? "post-off.html" : "post.html";
-            
-            // ゆうちゃんがCSSで決めたクラス名をそのまま使うよ！
             const snowClass = isOff ? "recent-snow2" : "recent-snow1";
             
+            // aタグに style="text-decoration: none; color: inherit;" を足したよ
+            // これで「変なアンダーバー」と「変な青色」が消えるよ！
             html += `
-                <li>
-                    <a href="${link}?id=${item.id}">
+                <li style="list-style: none; margin-bottom: 12px;">
+                    <a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;">
                         <span class="${snowClass}">❄</span>
-                        <span>${item.title}</span>
+                        <span style="margin-left: 5px;">${item.title}</span>
                     </a>
                 </li>
             `;
