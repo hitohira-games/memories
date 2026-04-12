@@ -244,6 +244,28 @@ for (let i = 0; i < count; i++) {
   window.addEventListener('popstate', () => {
       if (typeof updateList === 'function') updateList();
   });
+
+// --- 関数C：サイドバーの新着日記を表示する ---
+  function renderRecentPosts() {
+      const container = document.getElementById('recent-posts-list');
+      if (!container || !window.diaryData) return;
+      const recent = window.diaryData.slice(0, 5);
+      let html = '';
+      recent.forEach(item => {
+          const isOff = (item.type === "配信外");
+          const link = isOff ? "post-off.html" : "post.html";
+          const snowClass = isOff ? "recent-snow2" : "recent-snow1";
+          html += `
+              <li style="list-style: none; margin-bottom: 12px;">
+                  <a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;">
+                      <span class="${snowClass}">❄</span>
+                      <span style="margin-left: 5px;">${item.title}</span>
+                  </a>
+              </li>`;
+      });
+      container.innerHTML = html;
+  }
+
 </script>
 <!--
 <script src="js/diary-data.js"></script>-->

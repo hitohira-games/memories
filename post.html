@@ -163,24 +163,35 @@
     try {
       const res = await fetch(MY_GAS_URL);
       const allRows = await res.json();
+      
+      // 見つかった記事を「d」に入れる
       const d = allRows.find(item => String(item.id) === String(id));
-      window.diaryData = rows;
+      
+      // 全データをサイドバーとかで使うために保存（名前を allRows に合わせたよ！）
+      window.diaryData = allRows; 
       
       if (!d) {
         document.getElementById('post-title').innerText = "記事が見つかりません";
         return;
       }
 
+      // 各場所にデータを流し込む
       document.title = d.title + " — ❄ ゲームひとひら綴り ❄";
       document.getElementById('post-title').innerText = d.title;
       document.getElementById('post-date').innerText = d.date;
       document.getElementById('breadcrumb-title').innerText = d.title;
       document.getElementById('post-tag-display').innerText = "#" + d.category;
       
+      // 【重要！】本文のIDを「post-content」に修正（もしHTML側のIDが違うならそこに合わせてね！）
       const body = document.getElementById('list-content');
-      if (body) body.innerHTML = String(d.body).replace(/\n/g, '<br>');
+      if (body) {
+          body.innerHTML = String(d.body).replace(/\n/g, '<br>');
+      } else {
+          console.error("本文を入れる場所（post-content）が見つかりません！");
+      }
+
       console.log("★本文の表示完了！");
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("エラーが発生しました:", e); }
   }
 
   // --- 関数B：カテゴリー一覧を読み込む ---
@@ -225,6 +236,28 @@
   window.addEventListener('popstate', () => {
       if (typeof updateList === 'function') updateList();
   });
+
+// --- 関数C：サイドバーの新着日記を表示する ---
+  function renderRecentPosts() {
+      const container = document.getElementById('recent-posts-list');
+      if (!container || !window.diaryData) return;
+      const recent = window.diaryData.slice(0, 5);
+      let html = '';
+      recent.forEach(item => {
+          const isOff = (item.type === "配信外");
+          const link = isOff ? "post-off.html" : "post.html";
+          const snowClass = isOff ? "recent-snow2" : "recent-snow1";
+          html += `
+              <li style="list-style: none; margin-bottom: 12px;">
+                  <a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;">
+                      <span class="${snowClass}">❄</span>
+                      <span style="margin-left: 5px;">${item.title}</span>
+                  </a>
+              </li>`;
+      });
+      container.innerHTML = html;
+  }
+
 </script>
 <!--
 <script src="js/diary-data.js"></script>-->
