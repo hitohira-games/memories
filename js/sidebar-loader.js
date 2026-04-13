@@ -27,6 +27,15 @@ async function renderRecentPostsFromGAS() {
     const res = await fetch(GAS_URL);
     const allData = await res.json();
     
+// --- ❄️ ここから追加 ❄️ ---
+    // もし allData がリスト（配列）じゃなかったら（エラーメッセージなどが届いたら）
+    if (!Array.isArray(allData)) {
+      console.error("★データがリスト形式じゃないよ！GAS側を確認してね:", allData);
+      listContainer.innerHTML = "<li>日記の読み込みに失敗しました</li>";
+      return;
+    }
+    // --- ❄️ ここまで追加 ❄️ ---
+
     console.log("★3: GASから届いた全データ:", allData);
 
     if (!allData || allData.length === 0) {
