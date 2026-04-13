@@ -166,21 +166,38 @@ for (let i = 0; i < count; i++) {
         container.innerHTML = html;
     }
 
-    // ★2. ページ全体の読み込みとリスト作成
     async function startPage() {
         try {
             const response = await fetch(MY_GAS_URL);
             const allData = await response.json();
             window.diaryData = allData; 
 
+            // --- ❄ ここから「タグ」を読み取る処理 ❄ ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetTag = urlParams.get('tag'); // URLの ?tag= の中身をとるよ
+            // ------------------------------------------
+
             const typeFilter = "配信外"; 
-            const myPageData = allData.filter(item => item.type === typeFilter);
+            let myPageData = allData.filter(item => item.type === typeFilter);
+
+            // --- ❄ タグがあったらさらに絞り込む！ ❄ ---
+            if (targetTag) {
+                myPageData = myPageData.filter(item => item.category === targetTag);
+                
+                // ページ上のタイトル（配信外日記）を「FF14の日記」とかに変える
+                const titleEl = document.querySelector('.list-page-title');
+                if (titleEl) {
+                    titleEl.innerHTML = `<span class="title-snow1">❄</span>${targetTag} の日記`;
+                }
+            }
+            // ------------------------------------------
+
             myPageData.sort((a, b) => b.id - a.id);
             
             // 左側のリストを表示
             renderMyList(myPageData, typeFilter);
 
-            // 右側の新着日記を出す（サイドバーが出るまで粘る）
+            // 右側の新着日記を出す
             let attempts = 0;
             const checkAndRender = setInterval(() => {
                 const target = document.getElementById('recent-posts-list');

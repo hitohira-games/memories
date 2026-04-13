@@ -53,7 +53,7 @@
       <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
       <div class="deco-line"></div>
     </div>
-    <p class="site-subtitle">hitohira-games.pages.dev</p>
+    <p class="site-subtitle">hitohira.pages.dev</p>
   </header>
 
   <!-- ナビ -->
@@ -114,7 +114,7 @@
 
   <footer class="fade-in">
     <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
-    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira-games.pages.dev</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira.pages.dev</p>
   </footer>
 </div>
 
@@ -140,33 +140,44 @@ for (let i = 0; i < count; i++) {
 
     async function startPage() {
         try {
-            // 1. まずデータを取ってくる
             const response = await fetch(MY_GAS_URL);
             const allData = await response.json();
-            window.diaryData = allData; // 新着日記（サイドバー）用のデータ
+            window.diaryData = allData; 
 
-            // 2. 自分のページのリスト（左側）を作る
-            const currentFile = window.location.pathname.split("/").pop() || 'list.html';
-       
-       
-            const typeFilter = "配信";
-            
-            const myPageData = allData.filter(item => item.type === typeFilter);
+            // --- ❄ ここから「タグ」を読み取る処理 ❄ ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetTag = urlParams.get('tag'); // URLの ?tag= の中身をとるよ
+            // ------------------------------------------
+
+            const typeFilter = "配信"; 
+            let myPageData = allData.filter(item => item.type === typeFilter);
+
+            // --- ❄ タグがあったらさらに絞り込む！ ❄ ---
+            if (targetTag) {
+                myPageData = myPageData.filter(item => item.category === targetTag);
+                
+                // ページ上のタイトル（配信外日記）を「FF14の日記」とかに変える
+                const titleEl = document.querySelector('.list-page-title');
+                if (titleEl) {
+                    titleEl.innerHTML = `<span class="title-snow1">❄</span>${targetTag} の日記`;
+                }
+            }
+            // ------------------------------------------
+
             myPageData.sort((a, b) => b.id - a.id);
-
-            // リストの描画（ここは今まで通り）
+            
+            // 左側のリストを表示
             renderMyList(myPageData, typeFilter);
 
-            // 3. 【ここが解決の鍵！】サイドバーのHTMLが届くのを「待って」から新着を出す
-            // sidebar.html が読み込まれるまで最大5秒間、0.2秒おきにチェックするよ
-            let retryCount = 0;
-            const checkSidebar = setInterval(() => {
-                const sidebarBox = document.getElementById('recent-posts'); // サイドバー内のID
-                if (sidebarBox && typeof renderRecentPosts === 'function') {
-                    renderRecentPosts(); // ここでやっと新着日記を表示！
-                    clearInterval(checkSidebar);
+            // 右側の新着日記を出す
+            let attempts = 0;
+            const checkAndRender = setInterval(() => {
+                const target = document.getElementById('recent-posts-list');
+                if (target) {
+                    renderRecentPosts();
+                    clearInterval(checkAndRender);
                 }
-                if (retryCount++ > 25) clearInterval(checkSidebar); // 諦め制限
+                if (attempts++ > 30) clearInterval(checkAndRender);
             }, 200);
 
         } catch (e) { console.error("エラー:", e); }
