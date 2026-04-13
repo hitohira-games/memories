@@ -184,17 +184,29 @@ for (let i = 0; i < count; i++) {
     }
 
     // リスト描画用（コードをスッキリさせるため分離したよ）
+   // リスト描画用
     function renderMyList(data, type) {
         const listContainer = document.getElementById('diary-list-container');
         if (!listContainer) return;
         listContainer.innerHTML = '';
+        
         data.forEach(item => {
             const card = document.createElement('a');
             const linkDest = type === "配信外" ? "post-off.html" : "post.html";
             card.href = `${linkDest}?id=${item.id}`;
             card.className = 'article-card';
+            
+            // --- ❄ 日付を綺麗にする魔法 ❄ ---
+            const d = new Date(item.date);
+            const formattedDate = d.toLocaleDateString('ja-JP', {
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit'
+            }).replaceAll('/', '.'); // 2026.04.11 みたいな形にするよ
+            // ---------------------------------
+
             card.innerHTML = `
-                <div class="card-meta"><span class="card-date">${item.date}</span></div>
+                <div class="card-meta"><span class="card-date">${formattedDate}</span></div>
                 <h2 class="card-title">${item.title}</h2>
             `;
             listContainer.appendChild(card);
