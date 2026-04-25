@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配信日記 — ❄ ゲームひとひら綴り ❄</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="CSS/style.css">
+<style>
+  /* 一覧と全く同じタグの見た目にするよ */
+  .article-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag-item {
+    font-family: 'Klee One', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    color: #3378c1 !important;
+    background: transparent !important;
+    border: 1px solid rgba(136, 206, 235, 0.8) !important; 
+    padding: 1px 9px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-snowflakes"></div>
+
+<svg class="vine-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice">
+  <path d="M18 0 C18 0 10 40 18 80 C26 120 8 160 18 200 C28 240 10 280 18 320 C26 360 8 400 18 440 C28 480 10 520 18 560 C26 600 8 640 18 680 C28 720 18 800 18 800" stroke="#5a8a6a" stroke-width="2" fill="none" opacity="0.6"/>
+  <ellipse cx="10" cy="60"  rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 60)"  opacity="0.7"/>
+  <ellipse cx="26" cy="120" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 120)"  opacity="0.7"/>
+  <ellipse cx="10" cy="180" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 180)" opacity="0.7"/>
+  <ellipse cx="26" cy="240" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 240)"  opacity="0.7"/>
+  <ellipse cx="10" cy="300" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 300)" opacity="0.7"/>
+  <ellipse cx="26" cy="360" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 360)"  opacity="0.7"/>
+  <ellipse cx="10" cy="420" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 420)" opacity="0.7"/>
+  <ellipse cx="26" cy="480" rx="7" ry="4" fill="#5a8a6a" transform="rotate(25 26 480)"  opacity="0.7"/>
+  <ellipse cx="10" cy="540" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 540)" opacity="0.7"/>
+  <ellipse cx="26" cy="600" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 600)"  opacity="0.7"/>
+  <ellipse cx="10" cy="660" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 660)" opacity="0.7"/>
+  <ellipse cx="26" cy="720" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 720)"  opacity="0.7"/>
+</svg>
+<svg class="vine-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice">
+  <path d="M18 0 C18 0 10 40 18 80 C26 120 8 160 18 200 C28 240 10 280 18 320 C26 360 8 400 18 440 C28 480 10 520 18 560 C26 600 8 640 18 680 C28 720 18 800 18 800" stroke="#5a8a6a" stroke-width="2" fill="none" opacity="0.6"/>
+  <ellipse cx="10" cy="60"  rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 60)"  opacity="0.7"/>
+  <ellipse cx="26" cy="120" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 120)"  opacity="0.7"/>
+  <ellipse cx="10" cy="180" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-20 10 180)" opacity="0.7"/>
+  <ellipse cx="26" cy="240" rx="7" ry="4" fill="#5a8a6a" transform="rotate(30 26 240)"  opacity="0.7"/>
+  <ellipse cx="10" cy="300" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-25 10 300)" opacity="0.7"/>
+  <ellipse cx="26" cy="360" rx="7" ry="4" fill="#5a8a6a" transform="rotate(20 26 360)"  opacity="0.7"/>
+  <ellipse cx="10" cy="420" rx="7" ry="4" fill="#5a8a6a" transform="rotate(-30 10 420)" opacity="0.7"/>
+  <ellipse cx="26" cy="480" rx="7" ry="4" fill="#5a8a6a" transform="rotate(25 26 480)"  opacity="0.7"/>
+</svg>
+
+<div class="snow-container" id="snowContainer"></div>
+
+<div id="wrapper">
+  <header class="fade-in">
+    <div class="site-title-deco">
+      <div class="deco-line"></div>
+      <span class="snowflake-deco">❄</span>
+      <a href="index.html" class="site-title">ゲームひとひら綴り</a>
+      <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
+      <div class="deco-line"></div>
+    </div>
+    <p class="site-subtitle">hitohira.pages.dev</p>
+  </header>
+
+  <nav class="fade-in fade-in-delay-1">
+    <a href="list.html">配信日記</a>
+    <a href="list-off.html">配信外日記</a>
+    <a href="games.html">今まで遊んだゲーム</a>
+    <a href="profile.html">プロフィール</a>
+  </nav>
+
+  <div class="main-grid fade-in fade-in-delay-2">
+    <article>
+      <p class="breadcrumb">
+        <a href="index.html">トップ</a><span>›</span>
+        <a href="list.html">配信日記</a><span>›</span>
+        <span id="breadcrumb-title">記事読み込み中</span>
+      </p>
+
+      <div class="article-header">
+        <div class="article-meta-top">
+          <span id="post-date" class="article-date">----年--月--日</span>
+        </div>
+        <h1 class="article-title" id="post-title">読み込み中...</h1>
+        <div id="post-tag-display" class="article-tags"></div>
+      </div>
+
+      <div class="article-body-card">
+        <div class="article-body" id="list-content">記事の内容を読み込んでいます...</div>
+        <p class="article-footer-note">
+          ❄ &nbsp; 感想は <a href="#">X（旧Twitter）</a> や配信で教えてもらえたら嬉しいです。&nbsp; ❄
+        </p>
+      </div> 
+
+      <div id="BUTTON_AREA" style="margin: 40px 0; font-family: 'Shippori Mincho', serif;">
+        <div id="MY_NAV" style="display: flex !important; gap: 15px; margin-bottom: 15px;">
+          <a id="MAE" href="#" class="article-nav-btn" style="visibility: hidden; flex: 1; text-decoration: none; text-align: left; display: block;">
+            <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">‹ 前の記事</span><br>
+            <span id="MAE_T" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
+          </a>
+          <a id="TSUGI" href="#" class="article-nav-btn" style="visibility: hidden; flex: 1; text-decoration: none; text-align: right; display: block;">
+            <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">次の記事 ›</span><br>
+            <span id="TSUGI_T" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
+          </a>
+        </div>
+
+        <a id="ICHIRAN_BTN" href="list.html" class="article-nav-btn" style="display: block; text-decoration: none; text-align: center;">
+          <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">❄ カテゴリー一覧</span><br>
+          <div id="dynamic-tags" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px;">カテゴリーを読み込んでいます...</div>
+        </a>
+      </div>
+    </article>
+
+    <div id="sidebar-container"></div>
+  </div>
+
+  <footer class="fade-in">
+    <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira.pages.dev</p>
+  </footer>
+</div>
+
+<script>
+  // 1. 雪の演出
+  (function() {
+    const box = document.getElementById('snowContainer');
+    if(!box) return;
+    const icons = ['❄','❅','❆','✦','✧'];
+    for (let i = 0; i < 22; i++) {
+      const el = document.createElement('span');
+      el.classList.add('snowflake');
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
+      el.style.animationDuration = (10 + Math.random() * 18) + 's';
+      box.appendChild(el);
+    }
+  })();
+
+  const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
+
+  // --- 関数A：記事本文と「記事自体のタグ」をバラバラにする ---
+  async function loadDiary() {
+    const p = new URLSearchParams(window.location.search);
+    const id = p.get('id');
+    if (!id) return;
+
+    try {
+      const res = await fetch(MY_GAS_URL);
+      const allRows = await res.json();
+      const d = allRows.find(item => String(item.id) === String(id));
+      window.diaryData = allRows; 
+      
+      if (!d) {
+        document.getElementById('post-title').innerText = "記事が見つかりません";
+        return;
+      }
+
+      document.title = d.title + " — ❄ ゲームひとひら綴り ❄";
+      document.getElementById('post-title').innerText = d.title;
+      document.getElementById('breadcrumb-title').innerText = d.title;
+
+      // 日付
+      const dateObj = new Date(d.date);
+      document.getElementById('post-date').innerText = dateObj.toLocaleDateString('ja-JP', {year:'numeric', month:'2-digit', day:'2-digit'}).replaceAll('/', '.');
+
+      // 本文
+      document.getElementById('list-content').innerHTML = String(d.body).replace(/\n/g, '<br>');
+
+      // ★【ここが修正！】記事のタグをバラバラにする
+      const tagDisplay = document.getElementById('post-tag-display');
+      const rawCategory = d.category || "";
+      const tagArray = rawCategory.split(',').map(t => t.replace('#', '').trim()).filter(t => t !== "");
+      tagDisplay.innerHTML = tagArray.map(t => `<span class="tag-item">#${t}</span>`).join('');
+
+    } catch (e) { console.error(e); }
+  }
+
+  // --- 関数B：下の「カテゴリー一覧」をバラバラにして重複を消す ---
+  async function loadCategoryList() {
+    const container = document.getElementById('dynamic-tags'); 
+    if (!container) return;
+    try {
+      const res = await fetch(MY_GAS_URL);
+      const allData = await res.json();
+      
+      // 全記事からタグを集めてバラバラにする
+      let rawTags = [];
+      allData.forEach(item => {
+        if (item.category) {
+          const splitTags = item.category.split(',').map(t => t.replace('#', '').trim());
+          rawTags = rawTags.concat(splitTags);
+        }
+      });
+
+      // 重複を消して綺麗にする
+      const uniqueTags = [...new Set(rawTags)].filter(t => t !== "");
+      
+      // ボタンにする
+      container.innerHTML = uniqueTags.map(tag => 
+        `<a href="list.html?tag=${encodeURIComponent(tag)}" class="tag-item" style="text-decoration:none;">#${tag}</a>`
+      ).join('');
+    } catch (e) { console.error(e); }
+  }
+
+  // 3. 実行順序の整理
+  window.addEventListener('load', async () => {
+    await loadDiary();
+    await loadCategoryList();
+    if (typeof renderRecentPosts === 'function') renderRecentPosts();
+  });
+
+  // サイドバー新着日記
+  function renderRecentPosts() {
+    const container = document.getElementById('recent-posts-list');
+    if (!container || !window.diaryData) return;
+    const recent = window.diaryData.slice(0, 5);
+    container.innerHTML = recent.map(item => {
+      const isOff = (item.type === "配信外");
+      const link = isOff ? "post-off.html" : "post.html";
+      return `<li style="list-style: none; margin-bottom: 12px;"><a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;"><span class="${isOff ? "recent-snow2" : "recent-snow1"}">❄</span> <span style="margin-left: 5px;">${item.title}</span></a></li>`;
+    }).join('');
+  }
+
+  fetch("partials/sidebar.html").then(r => r.text()).then(d => {
+    document.getElementById("sidebar-container").innerHTML = d;
+  });
+</script>
+<script src="js/sidebar-loader.js"></script>
+</body>
+</html>

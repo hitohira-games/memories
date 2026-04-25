@@ -1,0 +1,1281 @@
+/* ============================================================
+   ゲームひとひら綴り — style.css
+   構成：
+     1. CSS変数
+     2. リセット・ベース
+     3. 背景・雪エフェクト
+     4. 蔦の装飾
+     5. ラッパー
+     6. ヘッダー
+     7. ナビゲーション
+     8. カード共通
+     9. サイドバー共通（プロフィール・更新・リンク・タグ）
+    10. フッター
+    11. アニメーション
+    12. レスポンシブ共通
+    ---- ページ固有 ----
+    13. index.html — トップページ
+    14. list.html  — 記事一覧
+    15. article.html — 記事本文
+   ============================================================ */
+
+
+/* ============================================================
+   1. CSS変数
+   ============================================================ */
+:root {
+  --bg: #f7f9fc;
+  --bg2: #eef4fb;
+  --snow: #ddeeff;
+  --navy: #1a2a4a;
+  --navy-mid: #2d4270;
+  --blue-light: #b8d4ee;
+  --blue-pale: #e0eef8;
+  --silver: #c8d8e8;
+  --accent: #F5A8E0;
+  --accent2: #fc89b9;
+  --green-vine: #5a8a6a;
+  --card-bg: rgba(255,255,255,0.82);
+  --card-border: #c4d8ee;
+  --shadow: 0 2px 18px rgba(30,60,120,0.08);
+}
+
+
+/* ============================================================
+   2. リセット・ベース
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--navy);
+  font-family: 'Zen Maru Gothic', 'Hiragino Kaku Gothic ProN', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+
+/* ============================================================
+   3. 背景・雪エフェクト
+   ============================================================ */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, #CEEBF8 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 100% 100%, #d4eaff 0%, transparent 60%),
+    linear-gradient(160deg, #f0f7ff 0%, #f7fafd 50%, #EEF5F6 100%);
+}
+
+.bg-snowflakes {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%232d5a9e' fill-opacity='1'%3E%3Cpath d='M40 10v60M10 40h60M22 22l36 36M22 58l36-36'stroke='%232d5a9e' stroke-width='2' fill='none'/%3E%3Ccircle cx='40' cy='40' r='3'/%3E%3Ccircle cx='40' cy='10' r='2.5'/%3E%3Ccircle cx='40' cy='70' r='2.5'/%3E%3Ccircle cx='10' cy='40' r='2.5'/%3E%3Ccircle cx='70' cy='40' r='2.5'/%3E%3Ccircle cx='22' cy='22' r='2'/%3E%3Ccircle cx='58' cy='58' r='2'/%3E%3Ccircle cx='22' cy='58' r='2'/%3E%3Ccircle cx='58' cy='22' r='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.snow-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.snowflake {
+  position: absolute;
+  top: -30px;
+  color: #aac8e8;
+  font-size: 1.1em;
+  opacity: 0;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0%   { opacity: 0; transform: translateY(-20px) rotate(0deg); }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(100vh) rotate(360deg); }
+}
+
+
+/* ============================================================
+   4. 蔦の装飾
+   ============================================================ */
+.vine-left,
+.vine-right {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 36px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.18;
+}
+
+.vine-left  { left: 0; }
+.vine-right { right: 0; transform: scaleX(-1); }
+
+
+/* ============================================================
+   5. ラッパー
+   ============================================================ */
+#wrapper {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+
+/* ============================================================
+   6. ヘッダー
+   ============================================================ */
+header {
+  text-align: center;
+  padding: 36px 0 20px;
+  position: relative;
+}
+
+.site-title-deco {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.deco-line {
+  flex: 1;
+  max-width: 160px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue-light), transparent);
+}
+
+.site-title {
+  font-family: 'Klee One', 'Hiragino Mincho ProN', serif;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  color: var(--navy-mid);
+  letter-spacing: 0.18em;
+  text-shadow: 0 1px 8px rgba(100,150,220,0.18);
+  text-decoration: none;
+}
+
+.site-subtitle {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 0.78rem;
+  color: #7090b0;
+  letter-spacing: 0.25em;
+  margin-top: 4px;
+}
+
+.snowflake-deco {
+  color: #7aabcc;
+  font-size: 1.3em;
+  display: inline-block;
+  animation: spin-slow 12s linear infinite;
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+
+/* ============================================================
+   7. ナビゲーション
+   ============================================================ */
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 2px;
+  padding: 10px 0 18px;
+  border-top: 1px solid var(--card-border);
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 28px;
+}
+
+nav a {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 0.82rem;
+  color: var(--navy-mid);
+  text-decoration: none;
+  padding: 5px 16px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+nav a::before {
+  content: '❄';
+  margin-right: 5px;
+  font-size: 0.7em;
+  opacity: 0.5;
+}
+
+nav a:hover,
+nav a.active {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+  color: var(--navy);
+}
+
+
+/* ============================================================
+   8. カード共通
+   ============================================================ */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 26px 28px;
+  box-shadow: 1px 1px 30px 2px #8bc2e5,inset 1px 1px 20px 3px #c8e6f9;
+border-radius: 10px;
+border-radius: 10px;
+  backdrop-filter: blur(6px);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-light), var(--silver), var(--blue-light));
+}
+
+.card-title {
+  font-family: 'Klee One', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: #7090b8;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--blue-light), transparent);
+}
+
+
+/* ============================================================
+   9. サイドバー共通
+   ============================================================ */
+
+/* プロフィール */
+.avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--card-border);
+  margin-bottom: 16px;
+}
+
+.avatar-frame {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid var(--blue-light);
+  background: linear-gradient(135deg, #d8eeff, #eef6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.2rem;
+  box-shadow: 0 2px 12px rgba(80,140,210,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 6px solid rgba(255,255,255,0.5);
+}
+
+.profile-name {
+  font-family: 'Klee One', serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--navy-mid);
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.profile-bio {
+  font-size: 0.78rem;
+  color: #6080a0;
+  text-align: center;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+}
+
+/* 最近の更新 */
+.recent-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;  /* index.html用（list/articleでは上書きなし・同じ挙動） */
+}
+
+.recent-item a {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--navy-mid);
+  text-decoration: none;
+  line-height: 1.5;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.recent-item a:hover {
+  background: var(--blue-pale);
+}
+
+.recent-item a:hover .recent-title {
+  color: var(--accent);
+}
+
+.recent-snow1 {
+  color: #4ab7ff;
+  font-size: 0.8em;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.recent-snow2 {
+  color: #69d8c2;
+  font-size: 0.8em;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.recent-legend{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  line-height:1.6;
+}
+
+.recent-legend-text{
+  font-size: 0.72rem;
+  color: #1c2d4f;
+  line-height:1.6;
+}
+
+.recent-title {
+  transition: color 0.15s;
+}
+
+.recent-date {
+  font-size: 0.72rem;
+  color: #90a8c0;
+  display: block;
+}
+
+/* ソーシャルリンク */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 4px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 7px;
+  text-decoration: none;
+  font-size: 0.78rem;
+  color: var(--navy-mid);
+  transition: all 0.2s;
+}
+
+.social-link:hover {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+}
+
+.social-icon {
+  font-size: 1em;
+  width: 18px;
+  text-align: center;
+  opacity: 0.75;
+}
+
+/* タグクラウド */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-item {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border: 1px solid var(--card-border);
+  background: var(--blue-pale);
+  border-radius: 20px;
+  color: var(--navy-mid);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.tag-item2 {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border: 1px solid var(--card-border);
+  background: #ffffff;
+  border-radius: 20px;
+  color: var(--navy-mid);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.tag-item:hover {
+  background: var(--blue-light);
+  color: var(--navy);
+}
+
+
+/* ============================================================
+   10. フッター
+   ============================================================ */
+footer {
+  text-align: center;
+  padding: 20px 0 10px;
+  margin-top: 30px;
+  border-top: 1px solid var(--card-border);
+}
+
+.footer-deco {
+  font-size: 0.9rem;
+  color: #a0b8d0;
+  letter-spacing: 0.3em;
+  margin-bottom: 6px;
+}
+
+.footer-copy {
+  font-size: 0.7rem;
+  color: #b0c4d8;
+  letter-spacing: 0.15em;
+}
+
+
+/* ============================================================
+   11. アニメーション
+   ============================================================ */
+.fade-in {
+  animation: fadeIn 0.8s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-delay-1 { animation-delay: 0.15s; }
+.fade-in-delay-2 { animation-delay: 0.3s; }
+.fade-in-delay-3 { animation-delay: 0.45s; }
+
+
+/* ============================================================
+   12. レスポンシブ共通
+   ============================================================ */
+@media (max-width: 700px) {
+  #wrapper {
+    padding: 0 14px 48px;
+  }
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+  .vine-left,
+  .vine-right {
+    display: none;
+  }
+  nav a {
+    font-size: 0.78rem;
+    padding: 5px 12px;
+  }
+  .site-title {
+    font-size: 1.4rem;
+  }
+}
+
+
+/* ============================================================
+   13. index.html — トップページ固有
+   ============================================================ */
+
+/* 2カラム */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* 挨拶カード */
+.greeting-card .greeting-text {
+  font-family: 'Klee One', serif;
+  font-size: 0.95rem;
+  line-height: 2.1;
+  color: var(--navy);
+}
+
+.greeting-card .greeting-text p + p {
+  margin-top: 10px;
+}
+
+.greeting-em {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* セクションリンク */
+.section-links {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sec-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--blue-pale);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--navy-mid);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+
+.sec-link:hover {
+  background: #d6eaf8;
+  border-color: var(--blue-light);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(50,100,180,0.1);
+}
+
+.sec-link-icon {
+  font-size: 1.1em;
+  opacity: 0.7;
+}
+
+/* プロフィールカード */
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* index.html レスポンシブ追加 */
+@media (max-width: 700px) {
+  .profile-card   { order: -1; }
+  .section-links  { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 400px) {
+  .section-links  { grid-template-columns: 1fr; }
+}
+
+
+/* ============================================================
+   14. list.html — 記事一覧固有
+   ============================================================ */
+
+/* --- ゆうちゃん専用：タイトルのリンク色設定 --- */
+.article-title a {
+    color: var(--navy-mid) !important; /* 変な青を消して、サイトの基本色にするよ */
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.article-title a:hover {
+    color: var(--accent) !important;   /* マウスを乗せた時はアクセントカラー（ピンク）に！ */
+    text-decoration: underline;
+}
+
+/* 続きを読むボタンの色 */
+.read-more {
+    color: var(--accent2) !important;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* パンくず・ページ見出し */
+.list-heading {
+  margin-bottom: 20px;
+}
+
+.breadcrumb {
+  font-size: 0.73rem;
+  color: #90a8c0;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.breadcrumb a {
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  margin: 0 5px;
+  opacity: 0.5;
+}
+
+.list-page-title {
+  font-family: 'Klee One', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--navy-mid);
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+/* 文字全体にフォントを適用 */
+.list-page-title {
+  font-family: 'Klee One', serif;
+  font-size: 1.8rem;
+}
+
+/* 雪の結晶だけの色とアニメーション設定 */
+.title-snow1 {
+  color: #65baff;
+  animation: spin-slow 12s linear infinite;
+  display: inline-block;
+}
+
+.title-snow2 {
+  color: #b6ffda;
+  animation: spin-slow 12s linear infinite;
+  display: inline-block;
+}
+
+.list-details {
+  font-size: 0.72rem;
+  color: #90a8c0;
+  letter-spacing: 0.05em;
+}
+
+/* タグフィルター */
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 14px 0 4px;
+}
+
+.tag-filter a {
+  font-size: 0.75rem;
+  padding: 4px 13px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  border-radius: 20px;
+  color: var(--navy-mid);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: all 0.15s;
+}
+
+.tag-filter a:hover {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+}
+
+.tag-filter a.active {
+  background: var(--blue-light);
+  border-color: var(--blue-light);
+  font-weight: 500;
+}
+
+/* 記事カード一覧 */
+.article-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.article-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 22px 26px;
+  box-shadow: 1px 1px 30px 2px #8bc2e5,inset 1px 1px 20px 3px #c8e6f9;
+  backdrop-filter: blur(6px);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.22s ease, transform 0.22s ease, border-color 0.22s ease;
+}
+
+.article-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-light), var(--silver), var(--blue-light));
+}
+
+.article-card:hover {
+  box-shadow: 0 6px 28px rgba(30,60,120,0.13);
+  transform: translateY(-2px);
+  border-color: var(--blue-light);
+  box-shadow: 1px 1px 30px 2px #8bc2e5,inset 1px 1px 20px 3px #c8e6f9;
+}
+
+.card-top {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  margin-bottom: 9px;
+}
+
+.card-category {
+  font-size: 0.7rem;
+  color: #7090b8;
+  letter-spacing: 0.12em;
+  background: var(--blue-pale);
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  font-family: 'Klee One', serif;
+}
+
+.card-date {
+  font-size: 0.72rem;
+  color: #90a8c0;
+  font-family: 'Shippori Mincho', serif;
+  letter-spacing: 0.1em;
+}
+
+.card-article-title {
+  font-family: 'Klee One', serif;
+  font-size: 1.0rem;
+  font-weight: 600;
+  color: var(--navy-mid);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  margin-bottom: 9px;
+  transition: color 0.15s;
+}
+
+.article-card:hover .card-article-title {
+  color: var(--accent);
+}
+
+.card-excerpt {
+  font-size: 0.83rem;
+  color: #4a6080;
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+  margin-bottom: 11px;
+  font-family: 'Klee One', serif;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.card-tag {
+  font-size: 0.68rem;
+  padding: 2px 9px;
+  border: 1px solid var(--silver);
+  background: rgba(255,255,255,0.6);
+  border-radius: 20px;
+  color: #6080a0;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: all 0.15s;
+}
+
+.card-tag:hover {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+  color: var(--navy-mid);
+}
+
+/* ページネーション */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 26px;
+}
+
+.page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--navy-mid);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: all 0.15s;
+  backdrop-filter: blur(4px);
+}
+
+.page-btn:hover {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+}
+
+.page-btn.current {
+  background: var(--blue-light);
+  border-color: var(--blue-light);
+  color: var(--navy);
+  font-weight: 500;
+}
+
+/* list.html レスポンシブ追加 */
+@media (max-width: 700px) {
+  .sidebar-col { display: none; }
+}
+
+
+/* ============================================================
+   15. article.html — 記事本文固有
+   ============================================================ */
+
+/* パンくず（article用はmargin-bottomが異なる） */
+.breadcrumb--article {
+  margin-bottom: 14px;
+}
+
+/* 記事ヘッダー */
+.article-header {
+  margin-bottom: 20px;
+}
+
+.article-meta-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  margin-bottom: 12px;
+}
+
+.article-category {
+  font-size: 0.7rem;
+  color: #7090b8;
+  letter-spacing: 0.12em;
+  background: var(--blue-pale);
+  padding: 3px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  font-family: 'Klee One', serif;
+}
+
+.article-date {
+  font-size: 0.75rem;
+  color: #90a8c0;
+  font-family: 'Shippori Mincho', serif;
+  letter-spacing: 0.1em;
+}
+
+.article-title {
+  font-family: 'Klee One', serif;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  color: var(--navy-mid);
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.article-tag {
+  font-size: 0.72rem;
+  padding: 3px 11px;
+  border: 1px solid var(--silver);
+  background: rgba(255,255,255,0.65);
+  border-radius: 20px;
+  color: #6080a0;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: all 0.15s;
+}
+
+.article-tag:hover {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+  color: var(--navy-mid);
+}
+
+/* 本文カード */
+.article-body {
+    white-space: pre-wrap; /* これを入れると、連続した改行もそのまま表示されます */
+    word-wrap: break-word; /* 長い英単語があっても枠からはみ出しません */
+}
+
+.article-body-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 32px 34px;
+  box-shadow: 1px 1px 30px 2px #8bc2e5,inset 1px 1px 20px 3px #c8e6f9;
+  backdrop-filter: blur(6px);
+  position: relative;
+  overflow: hidden;
+}
+
+.article-body-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-light), var(--silver), var(--blue-light));
+}
+
+/* 本文テキスト */
+.article-body {
+  font-family: 'Klee One', serif;
+  font-size: 0.95rem;
+  line-height: 2.15;
+  color: var(--navy);
+  letter-spacing: 0.04em;
+}
+
+.article-body p {
+  margin-bottom: 1.4em;
+}
+
+.article-body p:last-child {
+  margin-bottom: 0;
+}
+
+.article-body h2 {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--navy-mid);
+  margin: 1.8em 0 0.8em;
+  padding-left: 12px;
+  border-left: 3px solid var(--blue-light);
+  letter-spacing: 0.08em;
+}
+
+/* スクリーンショット */
+.article-screenshots {
+  margin: 22px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.screenshot-item {
+  display: block;
+}
+
+.screenshot-item img {
+  width: 100%;
+  max-width: 580px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 3px 16px rgba(30,60,120,0.1);
+  display: block;
+}
+
+.screenshot-placeholder {
+  width: 100%;
+  max-width: 580px;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  border: 1px dashed var(--blue-light);
+  background: var(--blue-pale);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #90b0cc;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+.screenshot-placeholder .ph-icon {
+  font-size: 2rem;
+  opacity: 0.45;
+}
+
+.screenshot-caption {
+  font-size: 0.74rem;
+  color: #90a8c0;
+  margin-top: 6px;
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+/* 記事末尾の一言 */
+.article-footer-note {
+  margin-top: 28px;
+  padding: 13px 18px;
+  background: linear-gradient(135deg, rgba(224,238,248,0.7), rgba(240,248,255,0.8));
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: #5a7898;
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+  text-align: center;
+  font-family: 'Klee One', serif;
+}
+
+.article-footer-note a {
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.article-footer-note a:hover {
+  text-decoration: underline;
+}
+
+/* 前後記事ナビ */
+.article-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 20px;
+
+}
+
+.article-nav-btn {
+  display: block;
+  padding: 13px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+box-shadow: 1px 1px 30px 2px #8bc2e5,inset 1px 1px 20px 3px #c8e6f9;
+}
+
+.article-nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-light), var(--silver), var(--blue-light));
+}
+
+.article-nav-btn:hover {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(30,60,120,0.1);
+  box-shadow: 1px 1px 30px 2px #8bc2e5,inset 1px 1px 20px 3px #c8e6f9;
+}
+
+.article-nav-btn.prev { text-align: left;margin:10px }
+.article-nav-btn.next { text-align: right;margin:10px }
+
+.nav-direction {
+  font-size: 0.68rem;
+  color: #90a8c0;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.nav-title {
+  font-family: 'Klee One', serif;
+  font-size: 0.85rem;
+  color: var(--navy-mid);
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  transition: color 0.15s;
+}
+
+.article-nav-btn:hover .nav-title {
+  color: var(--accent);
+}
+
+/* 同タグ記事 */
+.related-section {
+  margin-top: 20px;
+}
+
+.related-heading {
+  font-family: 'Klee One', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: #7090b8;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.related-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--blue-light), transparent);
+}
+
+.related-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.related-item a {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--navy-mid);
+  font-size: 0.82rem;
+  box-shadow: 1px 1px 30px 2px #8bc2e5,inset 1px 1px 20px 3px #c8e6f9;
+  backdrop-filter: blur(6px);
+  transition: all 0.18s;
+  line-height: 1.5;
+  position: relative;
+  overflow: hidden;
+  margin: 10px;
+}
+
+.related-item a::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-light), var(--silver), var(--blue-light));
+}
+
+.related-item a:hover {
+  background: var(--blue-pale);
+  border-color: var(--blue-light);
+  transform: translateX(3px);
+}
+
+.related-item a:hover .rel-title {
+  color: var(--accent);
+}
+
+.rel-snow {
+  color: #7aabcc;
+  flex-shrink: 0;
+  font-size: 0.8em;
+  margin-top: 2px;
+}
+
+.rel-title {
+  transition: color 0.15s;
+}
+
+.rel-date {
+  font-size: 0.7rem;
+  color: #90a8c0;
+  display: block;
+}
+
+/* article.html レスポンシブ追加 */
+@media (max-width: 700px) {
+  .sidebar-col       { display: none; }
+  .article-body-card { padding: 22px 20px; }
+  .article-nav       { grid-template-columns: 1fr; }
+}
+
+
+/* --- 記事の下に出る「一覧へ戻る」ボタンのデザイン --- */
+#related-tag-link {
+    margin-top: 40px; /* 上とのすきま */
+}
+
+/* 「❄ 同じタグの記事」という見出し */
+.related-heading {
+    font-family: 'Klee One', serif;
+    font-size: 0.8rem;
+    color: #90a8c0;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 見出しの横の線 */
+.related-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #c4d8ee, transparent);
+}
+

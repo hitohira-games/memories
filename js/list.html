@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配信日記一覧 — ❄ ゲームひとひら綴り ❄</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="CSS/style.css">
+<style>
+  .card-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  /* ★ 文字サイズをグッと絞って、1,2ミリ小さくしたよ ★ */
+  .tag-item {
+    font-family: 'Klee One', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important; /* ここを小さくしたよ！ */
+    color: #3378c1 !important;
+    
+    /* 囲み：スッキリ見えるように余白も調整 */
+    background: transparent !important;
+    border: 1px solid rgba(136, 206, 235, 0.8) !important; 
+    
+    padding: 1px 9px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-snowflakes"></div>
+<div class="snow-container" id="snowContainer"></div>
+
+<div id="wrapper">
+  <header class="fade-in">
+    <div class="site-title-deco">
+      <div class="deco-line"></div>
+      <span class="snowflake-deco">❄</span>
+      <a href="index.html" class="site-title">ゲームひとひら綴り</a>
+      <span class="snowflake-deco" style="animation-direction:reverse">❄</span>
+      <div class="deco-line"></div>
+    </div>
+    <p class="site-subtitle">hitohira.pages.dev</p>
+  </header>
+
+  <nav class="fade-in fade-in-delay-1">
+    <a href="list.html">配信日記</a>
+    <a href="list-off.html">配信外日記</a>
+    <a href="games.html">今まで遊んだゲーム</a>
+    <a href="profile.html">プロフィール</a>
+  </nav>
+
+  <div class="main-grid fade-in fade-in-delay-2">
+    <main>
+      <div class="list-heading">
+        <p class="breadcrumb"><a href="index.html">トップ</a><span>›</span>配信日記</p>
+        <h1 class="list-page-title"><span class="title-snow1">❄</span>配信日記</h1>
+        <p class="list-details">リンク先で全文が読めます</p>
+      </div>
+      <div class="article-list" id="diary-list-container"></div>
+    </main>
+    <div id="sidebar-container"></div>
+  </div>
+
+  <footer class="fade-in">
+    <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira.pages.dev</p>
+  </footer>
+</div>
+
+<script>
+  const container = document.getElementById('snowContainer');
+  const symbols = ['❄','❅','❆','✦','✧'];
+  for (let i = 0; i < 22; i++) {
+    const el = document.createElement('span');
+    el.classList.add('snowflake');
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
+    el.style.animationDuration = (10 + Math.random() * 18) + 's';
+    el.style.animationDelay = (Math.random() * 15) + 's';
+    container.appendChild(el);
+  }
+
+  const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
+
+  async function startPage() {
+    try {
+      const response = await fetch(MY_GAS_URL);
+      const allData = await response.json();
+      const typeFilter = "配信"; 
+      let myPageData = allData.filter(item => item.type === typeFilter);
+      myPageData.sort((a, b) => Number(b.id) - Number(a.id));
+      renderMyList(myPageData);
+    } catch (e) { console.error("エラー:", e); }
+  }
+
+  function renderMyList(data) {
+    const listContainer = document.getElementById('diary-list-container');
+    if (!listContainer) return;
+    listContainer.innerHTML = '';
+    
+    data.forEach(item => {
+      const card = document.createElement('a');
+      card.href = `post.html?id=${item.id}`;
+      card.className = 'article-card';
+      
+      const d = new Date(item.date);
+      const formattedDate = d.toLocaleDateString('ja-JP', {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+      }).replaceAll('/', '.');
+
+      const rawCategory = item.category || "";
+      const tags = rawCategory.split(',').map(t => t.replace('#', '').trim()).filter(t => t !== "");
+      const tagHtml = tags.map(t => `<span class="tag-item">#${t}</span>`).join('');
+
+      card.innerHTML = `
+        <div class="card-meta"><span class="card-date">${formattedDate}</span></div>
+        <h2 class="card-title">${item.title}</h2>
+        <div class="card-tags">${tagHtml}</div>
+      `;
+      listContainer.appendChild(card);
+    });
+  }
+
+  fetch("/partials/sidebar.html").then(r => r.text()).then(d => {
+    document.getElementById("sidebar-container").innerHTML = d;
+  });
+
+  window.addEventListener('DOMContentLoaded', startPage);
+</script>
+<script src="js/sidebar-loader.js"></script>
+</body>
+</html>
