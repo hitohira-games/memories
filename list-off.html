@@ -97,7 +97,7 @@
 </div>
 
 <script>
-  // 雪の演出
+  // 1. 雪を降らせる演出
   const sc = document.getElementById('snowContainer');
   const symbols = ['❄','❅','❆','✦','✧'];
   for (let i = 0; i < 22; i++) {
@@ -113,19 +113,23 @@
 
   const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
 
+  // 2. ページ全体のメイン処理
   async function startPage() {
     try {
       const response = await fetch(MY_GAS_URL);
       const allData = await response.json();
-      
+      window.diaryData = allData; // サイドバーの新着リストでも使えるように保存
+
       const urlParams = new URLSearchParams(window.location.search);
       const tagFilter = urlParams.get('tag');
 
-      // 1. 配信外だけで絞り込む
-      const typeFilter = "配信外"; 
+      // ★ list-offの場合はここを "配信外" に書き換えてね！
+      const isOffPage = window.location.pathname.includes('list-off');
+      const typeFilter = isOffPage ? "配信外" : "配信"; 
+      
       let myPageData = allData.filter(item => item.type === typeFilter);
 
-      // --- タグ集計処理 ---
+      // --- タグ集計 ---
       const tagCounts = {};
       myPageData.forEach(item => {
         if (!item.category) return;
@@ -135,14 +139,13 @@
 
       const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
       const tagsContainer = document.getElementById('all-tags-container');
-      
-      // ボタンの生成（自分自身のファイル名を取得してリンクを作る）
-      const currentFile = window.location.pathname.split('/').pop() || 'list-off.html';
+      const currentFile = isOffPage ? 'list-off.html' : 'list.html';
+
       tagsContainer.innerHTML = sortedTags.map(tag => 
         `<a href="${currentFile}?tag=${encodeURIComponent(tag)}" class="tag-item">#${tag}(${tagCounts[tag]})</a>`
       ).join('');
 
-      // 折りたたみスイッチ
+      // 折りたたみボタン
       const toggleBtn = document.getElementById('tag-toggle-btn');
       toggleBtn.onclick = () => {
         const isHidden = tagsContainer.style.display === 'none' || tagsContainer.style.display === '';
@@ -150,28 +153,28 @@
         toggleBtn.innerText = isHidden ? '❄ 閉じる' : '❄ タグで絞り込む';
       };
 
-      // --- 絞り込み実行 ---
+      // --- 絞り込み表示 ---
+      const snowClass = isOffPage ? "title-snow2" : "title-snow1";
       if (tagFilter) {
-        // タイトルを「タグ: 〇〇」に変更（配信外カラーのsnow2）
-        document.getElementById('page-main-title').innerHTML = `<span class="title-snow2">❄</span>タグ: ${tagFilter}`;
-        document.getElementById('page-sub-details').innerText = `「${tagFilter}」がついた配信外日記一覧です`;
-
+        document.getElementById('page-main-title').innerHTML = `<span class="${snowClass}">❄</span>タグ: ${tagFilter}`;
+        document.getElementById('page-sub-details').innerText = `「${tagFilter}」がついた日記一覧です`;
         myPageData = myPageData.filter(item => {
           if (!item.category) return false;
           const tags = item.category.split(/[,、\s#]+/).filter(t => t.trim() !== "");
           return tags.includes(tagFilter);
         });
-      } else {
-        // タグなしの時は「配信外日記」を表示
-        document.getElementById('page-main-title').innerHTML = `<span class="title-snow2">❄</span>配信外日記`;
-        document.getElementById('page-sub-details').innerText = `リンク先で全文が読めます`;
       }
 
       myPageData.sort((a, b) => Number(b.id) - Number(a.id));
       renderMyList(myPageData);
+
+      // データが読み終わったのでサイドバーを描画
+      renderRecentPosts();
+
     } catch (e) { console.error("エラー:", e); }
   }
 
+  // 3. 日記リスト（中央）を描画
   function renderMyList(data) {
     const listContainer = document.getElementById('diary-list-container');
     if (!listContainer) return;
@@ -179,7 +182,8 @@
     
     data.forEach(item => {
       const card = document.createElement('a');
-      card.href = `post-off.html?id=${item.id}`;
+      const targetPage = (item.type === "配信外") ? "post-off.html" : "post.html";
+      card.href = `${targetPage}?id=${item.id}`;
       card.className = 'article-card';
       
       const d = new Date(item.date);
@@ -200,11 +204,23 @@
     });
   }
 
+  // 4. サイドバーの新着リストを描画
+  function renderRecentPosts() {
+    const container = document.getElementById('recent-posts-list');
+    if (!container || !window.diaryData) return;
+    const recent = window.diaryData.slice(0, 5);
+    container.innerHTML = recent.map(item => {
+      const isOff = (item.type === "配信外");
+      const link = isOff ? "post-off.html" : "post.html";
+      return `<li style="list-style: none; margin-bottom: 12px;"><a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;"><span class="${isOff ? "recent-snow2" : "recent-snow1"}">❄</span> <span style="margin-left: 5px;">${item.title}</span></a></li>`;
+    }).join('');
+  }
+
+  // 5. サイドバーの枠だけ先に読み込む
   fetch("partials/sidebar.html").then(r => r.text()).then(d => {
     document.getElementById("sidebar-container").innerHTML = d;
+    startPage(); // サイドバーの枠ができてから、データ読み込みを開始！
   });
-
-  window.addEventListener('DOMContentLoaded', startPage);
 </script>
 </body>
 </html>
