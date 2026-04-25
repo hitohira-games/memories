@@ -119,6 +119,7 @@
 </div>
 
 <script>
+  // 1. 雪を降らせる設定
   (function() {
     const box = document.getElementById('snowContainer');
     if(!box) return;
@@ -136,6 +137,7 @@
 
   const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
 
+  // 2. 記事データを読み込んで表示する
   async function loadDiary() {
     const p = new URLSearchParams(window.location.search);
     const id = p.get('id');
@@ -144,14 +146,15 @@
     try {
       const res = await fetch(MY_GAS_URL);
       const allRows = await res.json();
-      const d = allRows.find(item => String(item.id) === String(id));
-      window.diaryData = allRows; 
+      window.diaryData = allRows; // 全データを保存（新着リスト用）
       
+      const d = allRows.find(item => String(item.id) === String(id));
       if (!d) {
         document.getElementById('post-title').innerText = "記事が見つかりません";
         return;
       }
 
+      // タイトルや本文の表示
       document.title = d.title + " — ❄ ゲームひとひら綴り ❄";
       document.getElementById('post-title').innerText = d.title;
       document.getElementById('breadcrumb-title').innerText = d.title;
@@ -159,33 +162,43 @@
       document.getElementById('post-date').innerText = dateObj.toLocaleDateString('ja-JP', {year:'numeric', month:'2-digit', day:'2-digit'}).replaceAll('/', '.');
       document.getElementById('list-content').innerHTML = String(d.body).replace(/\n/g, '<br>');
 
-      // タグをバラバラにする処理
+      // タグの処理（この記事のタグだけを表示）
       const tagDisplay = document.getElementById('post-tag-display');
       const relatedContainer = document.getElementById('dynamic-tags');
       const rawCategory = d.category || "";
       const tagArray = rawCategory.split(/[,、\s#]+/).filter(t => t.trim() !== "");
       const uniqueTags = [...new Set(tagArray)];
 
-      // 1. 本文上のタグを表示
+      // 本文上のタグ
       tagDisplay.innerHTML = uniqueTags.map(t => `<span class="tag-item">#${t}</span>`).join('');
-
-      // 2. 下の「関連タグ」エリアにこの記事のタグだけを表示
+      // 下の「関連タグ」
       if (relatedContainer) {
         relatedContainer.innerHTML = uniqueTags.map(tag => 
           `<a href="list.html?tag=${encodeURIComponent(tag)}" class="tag-item" style="text-decoration:none;">#${tag}</a>`
         ).join('');
       }
 
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("データ読み込み失敗:", e); }
   }
 
-  window.addEventListener('load', loadDiary);
+  // 3. サイドバーを読み込んで新着を出す
+  async function loadSidebar() {
+    try {
+      const r = await fetch("partials/sidebar.html");
+      const data = await r.text();
+      document.getElementById("sidebar-container").innerHTML = data;
 
-  fetch("partials/sidebar.html").then(r => r.text()).then(data => {
-    document.getElementById("sidebar-container").innerHTML = data;
-    if (typeof renderRecentPosts === 'function') renderRecentPosts();
-  });
+      // 日記データが届くまで待ってから新着リストを描く
+      const checkData = setInterval(() => {
+        if (window.diaryData) {
+          renderRecentPosts();
+          clearInterval(checkData);
+        }
+      }, 100);
+    } catch (e) { console.error("サイドバー読み込み失敗:", e); }
+  }
 
+  // 新着記事リストの中身を作る
   function renderRecentPosts() {
     const container = document.getElementById('recent-posts-list');
     if (!container || !window.diaryData) return;
@@ -196,6 +209,12 @@
       return `<li style="list-style: none; margin-bottom: 12px;"><a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;"><span class="${isOff ? "recent-snow2" : "recent-snow1"}">❄</span> <span style="margin-left: 5px;">${item.title}</span></a></li>`;
     }).join('');
   }
+
+  // 4. 全部実行！
+  window.addEventListener('load', () => {
+    loadDiary();
+    loadSidebar();
+  });
 </script>
 </body>
 </html>
