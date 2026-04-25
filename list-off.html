@@ -14,7 +14,6 @@
     flex-wrap: wrap;
     gap: 8px;
   }
-  
   .tag-item {
     font-family: 'Klee One', sans-serif !important;
     font-weight: 600 !important;
@@ -59,8 +58,8 @@
     <main>
       <div class="list-heading">
         <p class="breadcrumb"><a href="index.html">トップ</a><span>›</span>配信外日記</p>
-        <h1 class="list-page-title"><span class="title-snow2">❄</span>配信外日記</h1>
-        <p class="list-details">リンク先で全文が読めます</p>
+        <h1 class="list-page-title" id="page-main-title"><span class="title-snow2">❄</span>配信外日記</h1>
+        <p class="list-details" id="page-sub-details">リンク先で全文が読めます</p>
       </div>
       <div class="article-list" id="diary-list-container"></div>
     </main>
@@ -93,9 +92,24 @@
       const response = await fetch(MY_GAS_URL);
       const allData = await response.json();
       
-      // ★ ここを「配信外」に変更！
-      const typeFilter = "配信外"; 
-      let myPageData = allData.filter(item => item.type === typeFilter);
+      const urlParams = new URLSearchParams(window.location.search);
+      const tagFilter = urlParams.get('tag');
+
+      // 1. まずは「配信外」だけで絞る
+      let myPageData = allData.filter(item => item.type === "配信外");
+
+      // 2. タグが指定されていれば、さらに厳しく絞り込む
+      if (tagFilter) {
+        document.getElementById('page-main-title').innerHTML = `<span class="title-snow2">❄</span>タグ: ${tagFilter}`;
+        document.getElementById('page-sub-details').innerText = `「${tagFilter}」がついた配信外日記一覧です`;
+
+        myPageData = myPageData.filter(item => {
+          if (!item.category) return false;
+          // カンマ、読点、スペース、シャープでバラバラにして判定
+          const tags = item.category.split(/[,、\s#]+/).filter(t => t.trim() !== "");
+          return tags.includes(tagFilter); // 単語がぴったり一致するか？
+        });
+      }
       
       myPageData.sort((a, b) => Number(b.id) - Number(a.id));
       renderMyList(myPageData);
@@ -105,12 +119,10 @@
   function renderMyList(data) {
     const listContainer = document.getElementById('diary-list-container');
     if (!listContainer) return;
-    listContainer.innerHTML = '';
+    listContainer.innerHTML = data.length === 0 ? '<p>記事が見つかりませんでした。</p>' : '';
     
     data.forEach(item => {
       const card = document.createElement('a');
-      
-      // ★ リンク先を「post-off.html」に変更！
       card.href = `post-off.html?id=${item.id}`;
       card.className = 'article-card';
       
@@ -120,7 +132,7 @@
       }).replaceAll('/', '.');
 
       const rawCategory = item.category || "";
-      const tags = rawCategory.split(',').map(t => t.replace('#', '').trim()).filter(t => t !== "");
+      const tags = rawCategory.split(/[,、\s#]+/).filter(t => t.trim() !== "");
       const tagHtml = tags.map(t => `<span class="tag-item">#${t}</span>`).join('');
 
       card.innerHTML = `
@@ -132,12 +144,11 @@
     });
   }
 
-  fetch("/partials/sidebar.html").then(r => r.text()).then(d => {
+  fetch("partials/sidebar.html").then(r => r.text()).then(d => {
     document.getElementById("sidebar-container").innerHTML = d;
   });
 
   window.addEventListener('DOMContentLoaded', startPage);
 </script>
-<script src="js/sidebar-loader.js"></script>
 </body>
 </html>
