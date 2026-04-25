@@ -3,10 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FF14配信日記 2026/04/07 — ❄ ゲームひとひら綴り ❄</title>
+<title>配信日記 — ❄ ゲームひとひら綴り ❄</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="CSS/style.css">
+<style>
+  /* 一覧と全く同じタグの見た目にするよ */
+  .article-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag-item {
+    font-family: 'Klee One', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    color: #3378c1 !important;
+    background: transparent !important;
+    border: 1px solid rgba(136, 206, 235, 0.8) !important; 
+    padding: 1px 9px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+</style>
 </head>
 <body>
 
@@ -43,8 +66,6 @@
 <div class="snow-container" id="snowContainer"></div>
 
 <div id="wrapper">
-
-  <!-- ヘッダー -->
   <header class="fade-in">
     <div class="site-title-deco">
       <div class="deco-line"></div>
@@ -56,100 +77,63 @@
     <p class="site-subtitle">hitohira.pages.dev</p>
   </header>
 
-  <!-- ナビ -->
   <nav class="fade-in fade-in-delay-1">
-  <a href="list-off.html">配信日記</a>
-  <a href="list-off.html">配信外日記</a>
-  <a href="games.html">今まで遊んだゲーム</a>
-  <a href="profile.html">プロフィール</a>
-</nav>
+    <a href="list.html">配信日記</a>
+    <a href="list-off.html">配信外日記</a>
+    <a href="games.html">今まで遊んだゲーム</a>
+    <a href="profile.html">プロフィール</a>
+  </nav>
 
-  <!-- メイン -->
   <div class="main-grid fade-in fade-in-delay-2">
+    <article>
+      <p class="breadcrumb">
+        <a href="index.html">トップ</a><span>›</span>
+        <a href="list-off.html">配信外日記</a><span>›</span>
+        <span id="breadcrumb-title">記事読み込み中</span>
+      </p>
 
-    <!-- 左：記事本文 -->
-  <article>
-  <p class="breadcrumb">
-    <a href="index.html">トップ</a><span>›</span>
-    <a href="list-off.html">配信日記</a><span>›</span>
-    <span id="breadcrumb-title">記事読み込み中</span>
-  </p>
+      <div class="article-header">
+        <div class="article-meta-top">
+          <span id="post-date" class="article-date">----年--月--日</span>
+        </div>
+        <h1 class="article-title" id="post-title">読み込み中...</h1>
+        <div id="post-tag-display" class="article-tags"></div>
+      </div>
 
-  <div class="article-header">
-    <div class="article-meta-top">
-      <span id="post-date" class="article-date">----年--月--日</span>
-    </div>
-    <h1 class="article-title" id="post-title">読み込み中...</h1>
-    <div class="article-tags">
-      <span class="article-tag" id="post-tag-display">#読み込み中</span>
-    </div>
+      <div class="article-body-card">
+        <div class="article-body" id="list-content">記事の内容を読み込んでいます...</div>
+        <p class="article-footer-note">
+          ❄ &nbsp; 感想は <a href="#">X（旧Twitter）</a> や配信で教えてもらえたら嬉しいです。&nbsp; ❄
+        </p>
+      </div> 
+
+      <div id="BUTTON_AREA" style="margin: 40px 0; font-family: 'Shippori Mincho', serif;">
+        <div id="MY_NAV" style="display: flex !important; gap: 15px; margin-bottom: 15px;">
+          <a id="MAE" href="#" class="article-nav-btn" style="visibility: hidden; flex: 1; text-decoration: none; text-align: left; display: block;">
+            <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">‹ 前の記事</span><br>
+            <span id="MAE_T" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
+          </a>
+          <a id="TSUGI" href="#" class="article-nav-btn" style="visibility: hidden; flex: 1; text-decoration: none; text-align: right; display: block;">
+            <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">次の記事 ›</span><br>
+            <span id="TSUGI_T" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
+          </a>
+        </div>
+
+        <a id="ICHIRAN_BTN" href="list-off.html" class="article-nav-btn" style="display: block; text-decoration: none; text-align: center;">
+          <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">❄ カテゴリー一覧</span><br>
+          <div id="dynamic-tags" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px;">カテゴリーを読み込んでいます...</div>
+        </a>
+      </div>
+    </article>
+
+    <div id="sidebar-container"></div>
   </div>
 
-  <div class="article-body-card">
-    <div class="article-body" id="list-content">
-      記事の内容を読み込んでいます...
-    </div>
-    <p class="article-footer-note">
-      ❄ &nbsp; 感想は <a href="#">X（旧Twitter）</a> や配信で教えてもらえたら嬉しいです。&nbsp; ❄
-    </p>
-  </div> 
-
-  <div id="BUTTON_AREA" style="margin: 40px 0; font-family: 'Shippori Mincho', serif;">
-    <div id="MY_NAV" style="display: flex !important; gap: 15px; margin-bottom: 15px;">
-      <a id="MAE" href="#" class="article-nav-btn" style="visibility: hidden; flex: 1; text-decoration: none; text-align: left; display: block;">
-        <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">‹ 前の記事</span><br>
-        <span id="MAE_T" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
-      </a>
-
-      <a id="TSUGI" href="#" class="article-nav-btn" style="visibility: hidden; flex: 1; text-decoration: none; text-align: right; display: block;">
-        <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">次の記事 ›</span><br>
-        <span id="TSUGI_T" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
-      </a>
-    </div>
-
-    <a id="ICHIRAN_BTN" href="list-off.html" class="article-nav-btn" style="display: block; text-decoration: none; text-align: center;">
-      <span style="font-size: 11px; color: #88ceeb; letter-spacing: 0.2em; font-weight: bold;">❄ カテゴリー一覧</span><br>
-      <span id="related-tag-text" style="color:#3378C1; font-size: 15px; display: block; margin-top: 8px; font-weight: 500;">読み込み中...</span>
-    </a>
-  </div>
-  </article>
-
- <!-- サイドバー -->
-   <div id="sidebar-container"></div>
-<script>
-  fetch("partials/sidebar.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("sidebar-container").innerHTML = data;
-    });
-</script>
-
-   
   <footer class="fade-in">
     <p class="footer-deco">❄ &nbsp; ❄ &nbsp; ❄</p>
     <p class="footer-copy">© ゲームひとひら綴り &nbsp;|&nbsp; hitohira.pages.dev</p>
   </footer>
 </div>
-
-<script>
-const container = document.getElementById('snowContainer');
-const symbols = ['❄','❅','❆','✦','✧'];
-const count = 22;
-for (let i = 0; i < count; i++) {
-  const el = document.createElement('span');
-  el.classList.add('snowflake');
-  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-  el.style.left = Math.random() * 100 + 'vw';
-  el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
-  el.style.animationDuration = (10 + Math.random() * 18) + 's';
-  el.style.animationDelay = (Math.random() * 15) + 's';
-  el.style.opacity = 0;
-  container.appendChild(el);
-}
-</script>
-
-<script src="js/diary-data-off.js?v=2" defer></script>
-<script src="js/diary-contents-off.js?v=2" defer></script>
 
 <script>
   // 1. 雪の演出
@@ -164,17 +148,14 @@ for (let i = 0; i < count; i++) {
       el.style.left = Math.random() * 100 + 'vw';
       el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
       el.style.animationDuration = (10 + Math.random() * 18) + 's';
-      el.style.opacity = 0;
       box.appendChild(el);
     }
   })();
 
-  // 2. GAS連携のURL
   const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
 
-  // --- 関数A：記事本文を読み込む ---
+  // --- 関数A：記事本文と「記事自体のタグ」をバラバラにする ---
   async function loadDiary() {
-    console.log("★loadDiary開始");
     const p = new URLSearchParams(window.location.search);
     const id = p.get('id');
     if (!id) return;
@@ -183,9 +164,8 @@ for (let i = 0; i < count; i++) {
       const res = await fetch(MY_GAS_URL);
       const allRows = await res.json();
       const d = allRows.find(item => String(item.id) === String(id));
-      window.diaryData = rows;
-
-     
+      window.diaryData = allRows; 
+      
       if (!d) {
         document.getElementById('post-title').innerText = "記事が見つかりません";
         return;
@@ -193,87 +173,74 @@ for (let i = 0; i < count; i++) {
 
       document.title = d.title + " — ❄ ゲームひとひら綴り ❄";
       document.getElementById('post-title').innerText = d.title;
-      
-const dateObj = new Date(d.date);
-const formattedPostDate = dateObj.toLocaleDateString('ja-JP', {year:'numeric', month:'2-digit', day:'2-digit'}).replaceAll('/', '.');
-document.getElementById('post-date').innerText = formattedPostDate;
-
-
       document.getElementById('breadcrumb-title').innerText = d.title;
-      document.getElementById('post-tag-display').innerText = "#" + d.category;
-      
-      const body = document.getElementById('list-content');
-      if (body) body.innerHTML = String(d.body).replace(/\n/g, '<br>');
-      console.log("★本文の表示完了！");
+
+      // 日付
+      const dateObj = new Date(d.date);
+      document.getElementById('post-date').innerText = dateObj.toLocaleDateString('ja-JP', {year:'numeric', month:'2-digit', day:'2-digit'}).replaceAll('/', '.');
+
+      // 本文
+      document.getElementById('list-content').innerHTML = String(d.body).replace(/\n/g, '<br>');
+
+      // ★【ここが修正！】記事のタグをバラバラにする
+      const tagDisplay = document.getElementById('post-tag-display');
+      const rawCategory = d.category || "";
+      const tagArray = rawCategory.split(',').map(t => t.replace('#', '').trim()).filter(t => t !== "");
+      tagDisplay.innerHTML = tagArray.map(t => `<span class="tag-item">#${t}</span>`).join('');
+
     } catch (e) { console.error(e); }
   }
 
-  // --- 関数B：カテゴリー一覧を読み込む ---
+  // --- 関数B：下の「カテゴリー一覧」をバラバラにして重複を消す ---
   async function loadCategoryList() {
-    console.log("★カテゴリー一覧の作成開始");
     const container = document.getElementById('dynamic-tags'); 
     if (!container) return;
-
     try {
       const res = await fetch(MY_GAS_URL);
       const allData = await res.json();
-      const categories = [...new Set(allData.map(item => item.category))];
       
-      let html = '';
-      categories.forEach(cat => {
-          html += `<a href="list.html?tag=${encodeURIComponent(cat)}" class="tag-item" style="text-decoration:none; background:rgba(255,255,255,0.5); padding:5px 12px; border-radius:15px; font-size:0.85rem; color:#3378C1; border:1px solid #88ceeb;">#${cat}</a>`;
+      // 全記事からタグを集めてバラバラにする
+      let rawTags = [];
+      allData.forEach(item => {
+        if (item.category) {
+          const splitTags = item.category.split(',').map(t => t.replace('#', '').trim());
+          rawTags = rawTags.concat(splitTags);
+        }
       });
-      container.innerHTML = html;
-      console.log("★カテゴリーの表示完了！");
+
+      // 重複を消して綺麗にする
+      const uniqueTags = [...new Set(rawTags)].filter(t => t !== "");
+      
+      // ボタンにする
+      container.innerHTML = uniqueTags.map(tag => 
+        `<a href="list.html?tag=${encodeURIComponent(tag)}" class="tag-item" style="text-decoration:none;">#${tag}</a>`
+      ).join('');
     } catch (e) { console.error(e); }
   }
 
- // ページが読み込まれた時の処理
+  // 3. 実行順序の整理
   window.addEventListener('load', async () => {
-      // 1. まずはメインの日記リスト（または本文）を読み込む
-      // await をつけることで「読み込みが終わるまで次に行かないで」と命令するよ
-      if (typeof updateList === 'function') {
-          await updateList(); 
-      } else if (typeof loadDiary === 'function') {
-          await loadDiary();
-          await loadCategoryList();
-      }
-      
-      // 2. メインの読み込みが「完全に終わった後」に、新着日記を表示する
-      if (typeof renderRecentPosts === 'function') {
-          renderRecentPosts();
-      }
+    await loadDiary();
+    await loadCategoryList();
+    if (typeof renderRecentPosts === 'function') renderRecentPosts();
   });
 
-  // ブラウザの戻る・進むボタン用
-  window.addEventListener('popstate', () => {
-      if (typeof updateList === 'function') updateList();
-  });
-
-// --- 関数C：サイドバーの新着日記を表示する ---
+  // サイドバー新着日記
   function renderRecentPosts() {
-      const container = document.getElementById('recent-posts-list');
-      if (!container || !window.diaryData) return;
-      const recent = window.diaryData.slice(0, 5);
-      let html = '';
-      recent.forEach(item => {
-          const isOff = (item.type === "配信外");
-          const link = isOff ? "post-off.html" : "post.html";
-          const snowClass = isOff ? "recent-snow2" : "recent-snow1";
-          html += `
-              <li style="list-style: none; margin-bottom: 12px;">
-                  <a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;">
-                      <span class="${snowClass}">❄</span>
-                      <span style="margin-left: 5px;">${item.title}</span>
-                  </a>
-              </li>`;
-      });
-      container.innerHTML = html;
+    const container = document.getElementById('recent-posts-list');
+    if (!container || !window.diaryData) return;
+    const recent = window.diaryData.slice(0, 5);
+    container.innerHTML = recent.map(item => {
+      const isOff = (item.type === "配信外");
+      const link = isOff ? "post-off.html" : "post.html";
+      return `<li style="list-style: none; margin-bottom: 12px;"><a href="${link}?id=${item.id}" style="text-decoration: none; color: inherit;"><span class="${isOff ? "recent-snow2" : "recent-snow1"}">❄</span> <span style="margin-left: 5px;">${item.title}</span></a></li>`;
+    }).join('');
   }
 
+  fetch("partials/sidebar.html").then(r => r.text()).then(d => {
+    document.getElementById("sidebar-container").innerHTML = d;
+  });
 </script>
-<!--
-<script src="js/diary-data.js"></script>-->
 <script src="js/sidebar-loader.js"></script>
 </body>
 </html>
