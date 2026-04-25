@@ -26,6 +26,23 @@
     display: inline-block !important;
     line-height: 1.4 !important;
     letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+  /* 絞り込みエリアの調整 */
+  .tag-filter-section {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  #all-tags-container {
+    display: none;
+    margin-top: 15px;
+    padding: 20px;
+    background: rgba(255,255,255,0.2);
+    border: 1px dashed rgba(136, 206, 235, 0.5);
+    border-radius: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
   }
 </style>
 </head>
@@ -61,6 +78,14 @@
         <h1 class="list-page-title" id="page-main-title"><span class="title-snow1">❄</span>配信日記</h1>
         <p class="list-details" id="page-sub-details">リンク先で全文が読めます</p>
       </div>
+
+      <div class="tag-filter-section">
+        <button id="tag-toggle-btn" style="background: white; border: 1px solid #88ceeb; color: #3378c1; padding: 6px 20px; border-radius: 20px; cursor: pointer; font-family: 'Shippori Mincho', serif; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+          ❄ タグで絞り込む
+        </button>
+        <div id="all-tags-container"></div>
+      </div>
+
       <div class="article-list" id="diary-list-container"></div>
     </main>
     <div id="sidebar-container"></div>
@@ -73,7 +98,7 @@
 
 <script>
   // 雪の演出
-  const container = document.getElementById('snowContainer');
+  const sc = document.getElementById('snowContainer');
   const symbols = ['❄','❅','❆','✦','✧'];
   for (let i = 0; i < 22; i++) {
     const el = document.createElement('span');
@@ -83,7 +108,7 @@
     el.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
     el.style.animationDuration = (10 + Math.random() * 18) + 's';
     el.style.animationDelay = (Math.random() * 15) + 's';
-    container.appendChild(el);
+    sc.appendChild(el);
   }
 
   const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
@@ -93,23 +118,48 @@
       const response = await fetch(MY_GAS_URL);
       const allData = await response.json();
       
-      // URLから「?tag=〇〇」を取得
       const urlParams = new URLSearchParams(window.location.search);
       const tagFilter = urlParams.get('tag');
 
-      // 1. まずは「配信」タイプだけで絞る
-      let myPageData = allData.filter(item => item.type === "配信");
+      // ★ list-offの場合は "配信外" に書き換えてね
+      const typeFilter = "配信"; 
+      let myPageData = allData.filter(item => item.type === typeFilter);
 
-      // 2. もしタグ指定があるなら、さらに絞り込む！
+      // --- タグ集計処理 ---
+      const tagCounts = {};
+      myPageData.forEach(item => {
+        if (!item.category) return;
+        const tags = item.category.split(/[,、\s#]+/).filter(t => t.trim() !== "");
+        tags.forEach(tag => { tagCounts[tag] = (tagCounts[tag] || 0) + 1; });
+      });
+
+      const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
+      const tagsContainer = document.getElementById('all-tags-container');
+      
+      // ボタンの生成（リンク先を自分自身のファイル名に合わせる）
+      const currentFile = window.location.pathname.split('/').pop() || 'list.html';
+      tagsContainer.innerHTML = sortedTags.map(tag => 
+        `<a href="${currentFile}?tag=${encodeURIComponent(tag)}" class="tag-item">#${tag}(${tagCounts[tag]})</a>`
+      ).join('');
+
+      // 折りたたみスイッチ
+      const toggleBtn = document.getElementById('tag-toggle-btn');
+      toggleBtn.onclick = () => {
+        const isHidden = tagsContainer.style.display === 'none' || tagsContainer.style.display === '';
+        tagsContainer.style.display = isHidden ? 'flex' : 'none';
+        toggleBtn.innerText = isHidden ? '❄ 閉じる' : '❄ タグで絞り込む';
+      };
+
+      // --- 絞り込み実行 ---
       if (tagFilter) {
+        // ★ list-offの場合はここも title-snow2 にすると色が合うよ
         document.getElementById('page-main-title').innerHTML = `<span class="title-snow1">❄</span>タグ: ${tagFilter}`;
         document.getElementById('page-sub-details').innerText = `「${tagFilter}」がついた日記一覧です`;
 
         myPageData = myPageData.filter(item => {
           if (!item.category) return false;
-          // カンマやスペースでバラバラにして判定
           const tags = item.category.split(/[,、\s#]+/).filter(t => t.trim() !== "");
-          return tags.includes(tagFilter); // ぴったり一致するものだけ！
+          return tags.includes(tagFilter);
         });
       }
 
@@ -121,11 +171,12 @@
   function renderMyList(data) {
     const listContainer = document.getElementById('diary-list-container');
     if (!listContainer) return;
-    listContainer.innerHTML = data.length === 0 ? '<p>記事が見つかりませんでした。</p>' : '';
+    listContainer.innerHTML = data.length === 0 ? '<p style="text-align:center; opacity:0.6;">記事が見つかりませんでした。</p>' : '';
     
     data.forEach(item => {
       const card = document.createElement('a');
-      card.href = `post.html?id=${item.id}`;
+      const targetPage = (item.type === "配信外") ? "post-off.html" : "post.html";
+      card.href = `${targetPage}?id=${item.id}`;
       card.className = 'article-card';
       
       const d = new Date(item.date);
