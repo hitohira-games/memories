@@ -3,17 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>配信日記一覧 — ❄ ゲームひとひら綴り ❄</title>
+<title>日記一覧 — ❄ ゲームひとひら綴り ❄</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="CSS/style.css">
 <style>
-  .card-tags {
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+  .card-tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
   .tag-item {
     font-family: 'Klee One', sans-serif !important;
     font-weight: 600 !important;
@@ -28,21 +23,12 @@
     letter-spacing: 0.03em;
     text-decoration: none;
   }
-  /* 絞り込みエリアの調整 */
-  .tag-filter-section {
-    margin-bottom: 30px;
-    text-align: center;
-  }
+  .tag-filter-section { margin-bottom: 30px; text-align: center; }
   #all-tags-container {
-    display: none;
-    margin-top: 15px;
-    padding: 20px;
+    display: none; margin-top: 15px; padding: 20px;
     background: rgba(255,255,255,0.2);
     border: 1px dashed rgba(136, 206, 235, 0.5);
-    border-radius: 15px;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
+    border-radius: 15px; flex-wrap: wrap; gap: 10px; justify-content: center;
   }
 </style>
 </head>
@@ -74,8 +60,9 @@
   <div class="main-grid fade-in fade-in-delay-2">
     <main>
       <div class="list-heading">
-        <p class="breadcrumb"><a href="index.html">トップ</a><span>›</span>配信日記</p>
-        <h1 class="list-page-title" id="page-main-title"><span class="title-snow1">❄</span>配信日記</h1>
+        <p class="breadcrumb"><a href="index.html">トップ</a><span>›</span>日記一覧</p>
+        <!-- ファイル名でタイトルを自動切替 -->
+        <h1 class="list-page-title" id="page-main-title">❄日記</h1>
         <p class="list-details" id="page-sub-details">リンク先で全文が読めます</p>
       </div>
 
@@ -97,7 +84,7 @@
 </div>
 
 <script>
-  // 1. 雪を降らせる演出
+  // 1. 雪の演出
   const sc = document.getElementById('snowContainer');
   const symbols = ['❄','❅','❆','✦','✧'];
   for (let i = 0; i < 22; i++) {
@@ -113,21 +100,27 @@
 
   const MY_GAS_URL = "https://script.google.com/macros/s/AKfycbzB1DkBAyrV5YZrStVlr8AU4jbf-s0NEzYghrjr-rA51JB_DBh3wMulhbokJNcGIYB-/exec"; 
 
-  // 2. ページ全体のメイン処理
   async function startPage() {
     try {
       const response = await fetch(MY_GAS_URL);
       const allData = await response.json();
-      window.diaryData = allData; // サイドバーの新着リストでも使えるように保存
+
+      // ★ここが大事！全データをまず「日付順」にする（これでサイドバーも直る！）
+      allData.sort((a, b) => new Date(b.date) - new Date(a.date));
+      window.diaryData = allData; 
 
       const urlParams = new URLSearchParams(window.location.search);
       const tagFilter = urlParams.get('tag');
-
-      // ★ list-offの場合はここを "配信外" に書き換えてね！
       const isOffPage = window.location.pathname.includes('list-off');
       const typeFilter = isOffPage ? "配信外" : "配信"; 
       
+      // 配信種別でフィルタ
       let myPageData = allData.filter(item => item.type === typeFilter);
+
+      // 見出しの初期設定
+      const snowClass = isOffPage ? "title-snow2" : "title-snow1";
+      const pageTitleText = isOffPage ? "配信外日記" : "配信日記";
+      document.getElementById('page-main-title').innerHTML = `<span class="${snowClass}">❄</span>${pageTitleText}`;
 
       // --- タグ集計 ---
       const tagCounts = {};
@@ -145,7 +138,6 @@
         `<a href="${currentFile}?tag=${encodeURIComponent(tag)}" class="tag-item">#${tag}(${tagCounts[tag]})</a>`
       ).join('');
 
-      // 折りたたみボタン
       const toggleBtn = document.getElementById('tag-toggle-btn');
       toggleBtn.onclick = () => {
         const isHidden = tagsContainer.style.display === 'none' || tagsContainer.style.display === '';
@@ -154,7 +146,6 @@
       };
 
       // --- 絞り込み表示 ---
-      const snowClass = isOffPage ? "title-snow2" : "title-snow1";
       if (tagFilter) {
         document.getElementById('page-main-title').innerHTML = `<span class="${snowClass}">❄</span>タグ: ${tagFilter}`;
         document.getElementById('page-sub-details').innerText = `「${tagFilter}」がついた日記一覧です`;
@@ -165,16 +156,13 @@
         });
       }
 
-      myPageData.sort((a, b) => Number(b.id) - Number(a.id));
+      // ★ここから「ID順ソート」を削除したで！これで日付順が維持される！
       renderMyList(myPageData);
-
-      // データが読み終わったのでサイドバーを描画
       renderRecentPosts();
 
     } catch (e) { console.error("エラー:", e); }
   }
 
-  // 3. 日記リスト（中央）を描画
   function renderMyList(data) {
     const listContainer = document.getElementById('diary-list-container');
     if (!listContainer) return;
@@ -204,7 +192,6 @@
     });
   }
 
-  // 4. サイドバーの新着リストを描画
   function renderRecentPosts() {
     const container = document.getElementById('recent-posts-list');
     if (!container || !window.diaryData) return;
@@ -216,10 +203,9 @@
     }).join('');
   }
 
-  // 5. サイドバーの枠だけ先に読み込む
   fetch("partials/sidebar.html").then(r => r.text()).then(d => {
     document.getElementById("sidebar-container").innerHTML = d;
-    startPage(); // サイドバーの枠ができてから、データ読み込みを開始！
+    startPage();
   });
 </script>
 </body>
